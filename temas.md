@@ -18,43 +18,41 @@
 
 ## 1. ¿Qué tipo de web vamos a crear?
 
-Antes de utilizar herramientas, debemos saber qué queremos construir.
+Antes de elegir herramientas, debemos saber qué queremos construir. El tipo de web y su finalidad determinan la tecnología.
 
-### Tipos de web que debemos conocer
+> **Idea clave:** primero la necesidad, después la herramienta.
 
-| Tipo | Características | Ejemplo |
+### Cómo se genera la web
+
+| Tipo | Cómo funciona | Cuándo encaja |
 | --- | --- | --- |
-| Web estática | Contenido preparado, HTML, CSS y JS; puede servirse sin generar páginas en cada petición | Web corporativa sencilla |
-| Web dinámica | Genera o modifica contenidos según usuarios, datos o peticiones | Portal, aplicación web |
-| CMS | Permite gestionar contenidos sin programar cada página | WordPress |
-| Ecommerce | Permite mostrar productos, gestionar pedidos y vender | WooCommerce |
-| SPA | Aplicación que cambia vistas sin recargar completamente la página | Aplicación con React |
+| Web estática (SSG) | El HTML se genera antes de publicar; todos los usuarios reciben las mismas páginas | Contenido estable y poca interacción |
+| Web dinámica | El servidor genera la página en cada petición, normalmente con una base de datos | Contenido que cambia o depende del usuario |
+| SPA | El navegador carga una aplicación y cambia de vistas sin recargar la página | Interfaces muy interactivas |
 
-### Tecnologías para crear webs
+Un CMS o una tienda online no son otro tipo de generación: son soluciones que se montan sobre una web dinámica.
 
-En los últimos días hemos conocido otras formas de crear sitios web. No debemos confundir las herramientas ni pensar que todas sirven exactamente para lo mismo.
+### Del proyecto a la tecnología
 
-| Tecnología | ¿Qué es? | ¿Para qué se utiliza? |
+| Quiero… | Tecnología habitual | Por qué |
 | --- | --- | --- |
-| HTML | Lenguaje de marcado | Estructurar contenidos |
-| CSS | Lenguaje de estilos | Diseñar y dar formato |
-| JavaScript | Lenguaje de programación | Añadir interactividad |
-| React | Biblioteca de JavaScript | Crear interfaces interactivas |
-| WordPress | CMS | Gestionar webs y contenidos |
-| Astro | Framework web | Crear webs rápidas, especialmente de contenido |
-| SSG | Técnica de generación estática | Generar HTML antes de que el usuario solicite la página |
+| Una web corporativa, personal o de documentación | HTML, CSS y JS + Astro (SSG) | Contenido estable, rápida y fácil de alojar |
+| Un blog o una web que actualiza otra persona | WordPress (CMS) | Panel de administración sin tocar código |
+| Vender productos | WordPress + WooCommerce | Catálogo, pedidos, pagos y envíos |
+| Una aplicación con mucha interacción | React (SPA) + API | Interfaz que cambia sin recargar |
+| Un portal con usuarios y datos | Web dinámica (servidor + base de datos) | Contenido personalizado por usuario |
 
-### Astro
+### No mezclemos niveles
 
-Astro permite crear webs que pueden generar páginas HTML estáticas previamente, en lugar de construir todo el contenido en el navegador cada vez que un usuario accede.
+- **HTML, CSS y JavaScript** son los lenguajes base: estructura, estilos e interactividad.
+- **React** es una biblioteca de JavaScript para crear interfaces.
+- **Astro** es un framework para webs de contenido; genera HTML estático.
+- **WordPress** es un CMS y **WooCommerce** un plugin de ecommerce.
+- **SSG** es una técnica de generación estática, no un lenguaje ni una herramienta.
 
-Esto resulta especialmente interesante para:
+### Astro en una idea
 
-- Webs corporativas.
-- Blogs.
-- Documentación.
-- Landing pages.
-- Webs con mucho contenido y poca interacción compleja.
+Astro permite generar las páginas HTML antes de que el usuario las solicite, en lugar de construirlas en el navegador en cada visita. Por eso encaja bien en webs de contenido que cambian poco y necesitan cargar rápido.
 
 > **No necesitamos memorizar**
 >
@@ -74,9 +72,12 @@ Esto resulta especialmente interesante para:
 ### Recordamos
 
 - ¿Qué diferencia hay entre una web estática y una dinámica?
-- ¿Qué ventaja tiene utilizar un CMS?
-- ¿Todas las páginas web necesitan una base de datos?
-- ¿Qué tipo de web elegiríamos para una tienda online?
+- ¿Qué significa SSG y qué ventaja tiene?
+- Una empresa solo quiere presentar sus servicios: ¿qué web y qué tecnología elegirías?
+- ¿Y si quiere vender productos?
+- ¿Qué aporta un CMS? ¿Cuándo no lo necesitas?
+- ¿En qué se diferencian React, Astro y WordPress?
+- ¿Todas las webs necesitan una base de datos?
 
 ## 2. WordPress: el CMS
 

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d4ed8">
+<title>Actividades interactivas · Módulo 3</title>
+<style>
+  :root {
+    --azul: #1d4ed8;
+    --azul-oscuro: #1e3a8a;
+    --azul-suave: #eff6ff;
+    --verde: #16a34a;
+    --verde-texto: #15803d;
+    --rojo: #dc2626;
+    --rojo-texto: #b91c1c;
+    --texto: #1e293b;
+    --suave: #64748b;
+    --borde: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+  .volver {
+    display: inline-block; margin-bottom: 8px;
+    color: var(--azul); text-decoration: none; font-size: .8rem; font-weight: 600;
+  }
+  .volver:hover { text-decoration: underline; }
+
+  /* ---------- Cabecera ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255, 255, 255, .97);
+    border-bottom: 1px solid var(--borde);
+    padding: 14px 0 12px;
+  }
+  h1 { margin: 0; font-size: 1.3rem; color: var(--azul-oscuro); letter-spacing: -.01em; }
+  .sub { margin: 2px 0 0; color: var(--suave); font-size: .82rem; }
+  .aviso-noscript {
+    margin: 10px 0 0; padding: 8px 12px;
+    border: 1px solid #f59e0b; border-radius: 8px;
+    background: #fffbeb; color: #92400e; font-size: .8rem;
+  }
+
+  main { padding: 20px 0 30px; }
+  section.card { scroll-margin-top: 84px; }
+
+  /* ---------- Tarjetas ---------- */
+  .card {
+    border: 1px solid var(--borde); border-radius: 12px;
+    margin-bottom: 18px; background: #fff; overflow: hidden;
+  }
+  .card > header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; background: var(--azul-suave);
+    border-bottom: 1px solid var(--borde);
+  }
+  .num {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: var(--azul); color: #fff; font-weight: 700;
+    display: grid; place-content: center; font-size: .95rem;
+  }
+  .num svg { display: block; }
+  .card h2 { margin: 0; font-size: .98rem; color: var(--azul-oscuro); flex: 1; line-height: 1.3; }
+  .contador-seccion {
+    font-size: .78rem; font-weight: 700; color: var(--azul);
+    background: #fff; border: 1px solid var(--borde);
+    padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .contador-seccion.completo { color: #fff; background: var(--verde); border-color: var(--verde); }
+  .enunciado {
+    margin: 0; padding: 12px 14px; color: var(--suave); font-size: .88rem;
+    background: #fbfdff; border-bottom: 1px dashed var(--borde);
+  }
+
+  /* ---------- Filas de preguntas ---------- */
+  .fila { padding: 12px 14px; border-bottom: 1px dashed var(--borde); }
+  .fila:last-child { border-bottom: none; }
+  .fila.bien { box-shadow: inset 4px 0 0 0 var(--verde); }
+  .fila.mal { box-shadow: inset 4px 0 0 0 var(--rojo); }
+  .situacion { margin: 0 0 8px; font-weight: 600; font-size: .93rem; }
+  .numerada { margin: 0 0 8px; font-weight: 600; font-size: .93rem; }
+  .numerada .orden { color: var(--azul); }
+
+  select, textarea {
+    font: inherit; color: var(--texto); width: 100%;
+    padding: 10px 12px; border: 1px solid var(--borde); border-radius: 10px;
+    background: #fbfdff; transition: border-color .15s, box-shadow .15s;
+  }
+  select:focus, textarea:focus {
+    outline: none; border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, .12);
+  }
+  textarea { min-height: 72px; resize: vertical; }
+  .fila.bien select { border-color: var(--verde); }
+  .fila.mal select { border-color: var(--rojo); }
+
+  .fb { margin: 8px 0 0; font-size: .85rem; }
+  .fb.ok { color: var(--verde-texto); }
+  .fb.mal { color: var(--rojo-texto); }
+  .fb-grande { margin: 10px 14px 0; font-size: .87rem; }
+
+  /* ---------- Verdadero / falso ---------- */
+  .vf { display: flex; gap: 10px; flex-wrap: wrap; }
+  .vf label {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border: 1px solid var(--borde); border-radius: 10px;
+    background: #fff; cursor: pointer; transition: border-color .15s, background .15s;
+    -webkit-tap-highlight-color: rgba(29, 78, 216, .08);
+  }
+  .vf input[type="radio"] {
+    appearance: none; -webkit-appearance: none;
+    width: 18px; height: 18px; margin: 0; flex-shrink: 0;
+    border: 2px solid #94a3b8; border-radius: 50%; background: #fff;
+    cursor: pointer; display: grid; place-content: center; transition: border-color .15s;
+  }
+  .vf input[type="radio"]::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--azul); transform: scale(0); transition: transform .12s ease-in-out;
+  }
+  .vf input[type="radio"]:checked { border-color: var(--azul); }
+  .vf input[type="radio"]:checked::before { transform: scale(1); }
+  .vf input[type="radio"]:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+  .vf label.elegida { border-color: var(--azul); background: var(--azul-suave); }
+  .vf label.elegida span { color: var(--azul-oscuro); font-weight: 600; }
+
+  /* ---------- Ordenar pasos ---------- */
+  ol#lista-a3 { list-style: none; margin: 0; padding: 0; }
+  ol#lista-a3 li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-bottom: 1px dashed var(--borde);
+  }
+  ol#lista-a3 li:last-child { border-bottom: none; }
+  ol#lista-a3 li.bien { box-shadow: inset 4px 0 0 0 var(--verde); }
+  ol#lista-a3 li.mal { box-shadow: inset 4px 0 0 0 var(--rojo); }
+  .pos {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    background: #eef2f7; color: var(--azul-oscuro); font-weight: 700;
+    display: grid; place-content: center; font-size: .85rem;
+  }
+  li.bien .pos { background: var(--verde); color: #fff; }
+  li.mal .pos { background: var(--rojo); color: #fff; }
+  ol#lista-a3 .txt { flex: 1; font-size: .93rem; }
+  .mover { display: flex; gap: 6px; flex-shrink: 0; }
+  .mini {
+    width: 36px; height: 36px; border: 1px solid var(--borde); border-radius: 8px;
+    background: #fff; color: var(--azul); font-size: .9rem; cursor: pointer;
+    display: grid; place-content: center; transition: background .15s;
+  }
+  .mini:not(:disabled):active { background: var(--azul-suave); }
+  .mini:disabled { opacity: .3; cursor: default; }
+
+  /* ---------- Caso práctico ---------- */
+  .caso { padding: 12px 14px; border-bottom: 1px dashed var(--borde); }
+  .caso p { margin: 0 0 8px; font-size: .92rem; }
+  .caso ul.req { margin: 0; padding-left: 20px; font-size: .92rem; }
+  .caso ul.req li { margin-bottom: 2px; }
+  .pregunta { padding: 12px 14px; border-bottom: 1px dashed var(--borde); }
+  .pregunta:last-child { border-bottom: none; }
+  details.propuesta { margin-top: 8px; }
+  details.propuesta summary {
+    color: var(--azul); font-weight: 600; font-size: .86rem; cursor: pointer;
+  }
+  .sol {
+    margin: 8px 0 0; padding: 10px 12px; border-radius: 10px;
+    background: var(--azul-suave); color: var(--azul-oscuro); font-size: .88rem;
+  }
+
+  /* ---------- Botones y acciones ---------- */
+  .acciones { display: flex; align-items: center; gap: 12px; padding: 12px 14px 14px; flex-wrap: wrap; }
+  .btn {
+    font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 10px; padding: 10px 18px;
+    border: 1px solid var(--azul); background: var(--azul); color: #fff;
+    transition: filter .15s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn.peligro { background: #fff; color: var(--rojo-texto); border-color: #fca5a5; }
+  .btn.peligro:not(:disabled):active { background: #fef2f2; }
+  .resultado { font-weight: 600; font-size: .9rem; }
+  .resultado.ok { color: var(--verde-texto); }
+  .resultado.medio { color: #b45309; }
+
+  /* ---------- Resumen ---------- */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px 4px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 999px; border: 1px solid var(--borde);
+    background: #fff; color: var(--texto); text-decoration: none;
+    font-size: .84rem; font-weight: 600;
+  }
+  .chip strong { color: var(--azul); font-weight: 700; }
+  .chip.completo { border-color: var(--verde); }
+  .chip.completo strong { color: var(--verde-texto); }
+  .total-line { margin: 0; padding: 8px 14px 0; font-size: .92rem; }
+  .total-line strong { color: var(--azul-oscuro); }
+  .total-line .nota { color: var(--suave); font-size: .8rem; }
+
+  footer {
+    text-align: center; color: var(--suave); font-size: .78rem;
+    padding: 6px 16px 34px;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="volver" href="../">← Volver al temario</a>
+    <h1>Actividades interactivas · Módulo 3</h1>
+    <p class="sub">Herramientas, WordPress, WooCommerce, SEO y publicación · Tus respuestas se guardan en este navegador</p>
+    <noscript><p class="aviso-noscript">Esta página necesita JavaScript para las actividades interactivas y el guardado de respuestas.</p></noscript>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="card" id="resumen">
+    <header>
+      <span class="num" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
+      </span>
+      <h2>Tu progreso</h2>
+    </header>
+    <div class="chips">
+      <a class="chip" href="#act1">1 · Herramientas <strong id="chip-a1">–</strong></a>
+      <a class="chip" href="#act2">2 · Verdadero o falso <strong id="chip-a2">–</strong></a>
+      <a class="chip" href="#act3">3 · Ordenar pasos <strong id="chip-a3">–</strong></a>
+      <a class="chip" href="#act4">4 · Caso práctico <strong id="chip-a4">–</strong></a>
+    </div>
+    <p class="total-line">Puntuación autoevaluable: <strong id="total">0/25</strong><span class="nota"> · la actividad 4 se revisa en clase</span></p>
+    <div class="acciones">
+      <button type="button" id="borrar" class="btn peligro">Borrar todas mis respuestas</button>
+    </div>
+  </section>
+
+  <section class="card" id="act1">
+    <header>
+      <span class="num">1</span>
+      <h2>¿Qué herramienta utilizarías?</h2>
+      <span class="contador-seccion" id="pill-a1">–/10</span>
+    </header>
+    <p class="enunciado">Lee cada situación y elige la herramienta más adecuada de la lista. Cuando termines, pulsa «Comprobar».</p>
+    <div id="filas-a1"></div>
+    <div class="acciones">
+      <button type="button" class="btn" id="btn-a1">Comprobar</button>
+      <span class="resultado" id="res-a1"></span>
+    </div>
+  </section>
+
+  <section class="card" id="act2">
+    <header>
+      <span class="num">2</span>
+      <h2>Verdadero o falso</h2>
+      <span class="contador-seccion" id="pill-a2">–/10</span>
+    </header>
+    <p class="enunciado">Marca si cada afirmación es verdadera o falsa. Cuando termines, pulsa «Comprobar».</p>
+    <div id="filas-a2"></div>
+    <div class="acciones">
+      <button type="button" class="btn" id="btn-a2">Comprobar</button>
+      <span class="resultado" id="res-a2"></span>
+    </div>
+  </section>
+
+  <section class="card" id="act3">
+    <header>
+      <span class="num">3</span>
+      <h2>Ordena el proceso</h2>
+      <span class="contador-seccion" id="pill-a3">–/5</span>
+    </header>
+    <p class="enunciado">Una empresa quiere crear y publicar una web estática. Ordena los pasos con las flechas y pulsa «Comprobar».</p>
+    <ol id="lista-a3"></ol>
+    <p class="fb fb-grande" id="fb-a3" hidden></p>
+    <div class="acciones">
+      <button type="button" class="btn" id="btn-a3">Comprobar</button>
+      <span class="resultado" id="res-a3"></span>
+    </div>
+  </section>
+
+  <section class="card" id="act4">
+    <header>
+      <span class="num">4</span>
+      <h2>Caso práctico final</h2>
+      <span class="contador-seccion" id="pill-a4">0/8</span>
+    </header>
+    <div class="caso">
+      <p>Una pequeña empresa de informática quiere crear una web para presentar sus servicios y vender algunos productos. La web debe tener:</p>
+      <ul class="req">
+        <li>Una página de inicio.</li>
+        <li>Una página de contacto.</li>
+        <li>Un catálogo de productos.</li>
+        <li>Un formulario de contacto.</li>
+        <li>Un sistema de pedidos.</li>
+        <li>Descuentos para clientes.</li>
+        <li>Una web segura.</li>
+        <li>Posibilidad de aparecer en Google.</li>
+      </ul>
+    </div>
+    <div id="filas-a4"></div>
+    <div class="acciones">
+      <span class="resultado">Responde con tus palabras y compara tu respuesta con la propuesta de cada pregunta.</span>
+    </div>
+  </section>
+
+</main>
+
+<footer>Tus respuestas se guardan solo en este dispositivo (localStorage del navegador).</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var CLAVE = "actividades-modulo-3-v1";
+
+  /* ================= DATOS ================= */
+
+  var HERRAMIENTAS = [
+    "Astro",
+    "Copia de seguridad",
+    "Cupones de WooCommerce",
+    "Entradas de WordPress",
+    "FTP (FileZilla)",
+    "Git",
+    "GitHub",
+    "Google Search Console (SEO)",
+    "HTTPS con certificado SSL",
+    "Netlify",
+    "Pasarela de pago (Stripe, PayPal, Redsys)",
+    "Plugin de WordPress",
+    "Sitemap",
+    "Tema de WordPress",
+    "WooCommerce",
+    "XAMPP o LocalWP"
+  ];
+
+  var A1 = [
+    { s: "Quiero crear una tienda online en WordPress", r: "WooCommerce",
+      e: "WooCommerce es el plugin que convierte WordPress en una tienda online." },
+    { s: "Quiero añadir un formulario de contacto", r: "Plugin de WordPress",
+      e: "Los formularios se añaden con plugins como Contact Form 7 o WPForms." },
+    { s: "Quiero transferir archivos a un servidor", r: "FTP (FileZilla)",
+      e: "FTP es el protocolo para transferir archivos al servidor; FileZilla es el cliente más conocido." },
+    { s: "Quiero publicar una web estática", r: "Netlify",
+      e: "Netlify publica webs estáticas de forma rápida y sencilla." },
+    { s: "Quiero gestionar versiones de mi código", r: "Git",
+      e: "Git es el sistema de control de versiones; GitHub es la plataforma que aloja los repositorios." },
+    { s: "Quiero crear descuentos para mis clientes", r: "Cupones de WooCommerce",
+      e: "Los cupones de WooCommerce permiten crear descuentos para los clientes." },
+    { s: "Quiero mejorar el posicionamiento de mi web", r: "Google Search Console (SEO)",
+      e: "Google Search Console ayuda a monitorizar y mejorar el posicionamiento de la web (SEO)." },
+    { s: "Quiero proteger los datos que envían los usuarios", r: "HTTPS con certificado SSL",
+      e: "HTTPS cifra la comunicación entre navegador y servidor gracias al certificado SSL/TLS." },
+    { s: "Quiero gestionar noticias de mi empresa", r: "Entradas de WordPress",
+      e: "Las noticias se gestionan con las entradas de WordPress, que son contenido cronológico." },
+    { s: "Quiero desplegar una web desde GitHub", r: "Netlify",
+      e: "Netlify puede desplegar automáticamente la web cada vez que se actualiza el repositorio de GitHub." }
+  ];
+
+  var A2 = [
+    { s: "WordPress es un CMS.", ok: "v",
+      e: "WordPress es un gestor de contenidos (CMS), el más utilizado del mundo." },
+    { s: "Un plugin sirve principalmente para cambiar los colores de la web.", ok: "f",
+      e: "Cambiar el diseño y los colores es función de los temas; los plugins añaden funcionalidades nuevas." },
+    { s: "WooCommerce permite crear tiendas online.", ok: "v",
+      e: "WooCommerce es el plugin de tienda online para WordPress." },
+    { s: "GitHub y Git son exactamente lo mismo.", ok: "f",
+      e: "Git es el sistema de control de versiones; GitHub es la plataforma web que aloja los repositorios." },
+    { s: "Netlify permite publicar sitios web.", ok: "v",
+      e: "Netlify despliega y publica sitios web, sobre todo estáticos." },
+    { s: "HTTPS ayuda a proteger la comunicación entre el navegador y el servidor.", ok: "v",
+      e: "HTTPS cifra la comunicación entre el navegador y el servidor." },
+    { s: "Una entrada y una página de WordPress son exactamente lo mismo.", ok: "f",
+      e: "Las entradas son contenido cronológico (noticias, blog); las páginas son contenido fijo (Inicio, Contacto)." },
+    { s: "Un hosting permite alojar una web para que pueda ser accesible por Internet.", ok: "v",
+      e: "El hosting es el servidor donde se alojan los archivos de tu web." },
+    { s: "Una copia de seguridad sirve para recuperar información en caso de pérdida.", ok: "v",
+      e: "Con una copia de seguridad puedes restaurar la información si se produce una pérdida." },
+    { s: "Astro es un gestor de bases de datos.", ok: "f",
+      e: "Astro es un framework para generar webs estáticas (SSG); no es un gestor de bases de datos." }
+  ];
+
+  var PASOS = {
+    crear: "Crear los archivos HTML, CSS y JS.",
+    github: "Subir el proyecto a GitHub.",
+    netlify: "Desplegar el proyecto utilizando Netlify.",
+    publicar: "Publicar la web.",
+    comprobar: "Comprobar que la web funciona correctamente."
+  };
+  var ORDEN_OK = ["crear", "github", "netlify", "publicar", "comprobar"];
+  var ORDEN_INICIAL = ["github", "publicar", "netlify", "comprobar", "crear"];
+
+  var A4 = [
+    { p: "¿Qué CMS podríamos utilizar?",
+      e: "WordPress, un CMS que permite crear y gestionar la web sin programar." },
+    { p: "¿Qué plugin nos permitiría crear la tienda?",
+      e: "WooCommerce, el plugin de tienda online para WordPress." },
+    { p: "¿Cómo podríamos añadir un formulario?",
+      e: "Añadiendo un plugin de formularios como Contact Form 7 o WPForms, o usando los bloques de formularios del editor de WordPress." },
+    { p: "¿Qué necesitamos para cobrar online?",
+      e: "Una pasarela de pago conectada a WooCommerce, por ejemplo Stripe, PayPal o Redsys." },
+    { p: "¿Qué debemos hacer para mejorar su SEO?",
+      e: "Elegir buenas palabras clave, escribir títulos SEO y meta descripciones, publicar contenido de calidad, crear un sitemap y dar de alta la web en Google Search Console." },
+    { p: "¿Qué medidas básicas de seguridad aplicaríamos?",
+      e: "Instalar HTTPS con su certificado SSL/TLS, mantener WordPress y los plugins actualizados, hacer copias de seguridad periódicas y proteger los usuarios con contraseñas seguras." },
+    { p: "¿Qué elementos legales debemos tener en cuenta?",
+      e: "Cumplir el RGPD: aviso legal, política de privacidad, aviso de cookies y pedir el consentimiento antes de recoger datos personales." },
+    { p: "¿Qué necesitamos para publicar la web?",
+      e: "Un hosting y un dominio (o un servicio como Netlify), subir o instalar la web en el servidor y comprobar que todo funciona correctamente." }
+  ];
+
+  /* ================= ESTADO ================= */
+
+  function arr(n) {
+    return Array.apply(null, Array(n)).map(function () { return ""; });
+  }
+
+  function nuevoEstado() {
+    return {
+      a1: arr(10), a1res: -1,
+      a2: arr(10), a2res: -1,
+      a3: ORDEN_INICIAL.slice(), a3res: -1,
+      a4: arr(8)
+    };
+  }
+
+  var estado = nuevoEstado();
+  try {
+    var bruto = localStorage.getItem(CLAVE);
+    if (bruto) {
+      var d = JSON.parse(bruto);
+      if (d && typeof d === "object") {
+        if (Array.isArray(d.a1) && d.a1.length === 10) estado.a1 = d.a1.map(function (x) { return typeof x === "string" ? x : ""; });
+        if (typeof d.a1res === "number") estado.a1res = d.a1res;
+        if (Array.isArray(d.a2) && d.a2.length === 10) estado.a2 = d.a2.map(function (x) { return typeof x === "string" ? x : ""; });
+        if (typeof d.a2res === "number") estado.a2res = d.a2res;
+        if (Array.isArray(d.a3) && d.a3.length === 5 &&
+            d.a3.every(function (k) { return PASOS.hasOwnProperty(k); })) estado.a3 = d.a3.slice();
+        if (typeof d.a3res === "number") estado.a3res = d.a3res;
+        if (Array.isArray(d.a4) && d.a4.length === 8) estado.a4 = d.a4.map(function (x) { return typeof x === "string" ? x : ""; });
+      }
+    }
+  } catch (e) {
+    /* localStorage no disponible: la página funciona sin memoria */
+  }
+
+  function guardar() {
+    try { localStorage.setItem(CLAVE, JSON.stringify(estado)); } catch (e) { /* sin almacenamiento */ }
+  }
+
+  /* ================= ACTIVIDAD 1 ================= */
+
+  var refsA1 = [];
+  var contA1 = document.getElementById("filas-a1");
+
+  A1.forEach(function (item, i) {
+    var fila = document.createElement("div");
+    fila.className = "fila";
+
+    var p = document.createElement("p");
+    p.className = "situacion";
+    p.textContent = (i + 1) + ". " + item.s;
+
+    var sel = document.createElement("select");
+    var opt0 = document.createElement("option");
+    opt0.value = "";
+    opt0.textContent = "— Elige una herramienta —";
+    sel.appendChild(opt0);
+    HERRAMIENTAS.forEach(function (h) {
+      var o = document.createElement("option");
+      o.value = h;
+      o.textContent = h;
+      sel.appendChild(o);
+    });
+    sel.value = estado.a1[i];
+
+    var fb = document.createElement("p");
+    fb.className = "fb";
+    fb.hidden = true;
+
+    sel.addEventListener("change", function () {
+      estado.a1[i] = sel.value;
+      estado.a1res = -1;
+      fila.classList.remove("bien", "mal");
+      fb.hidden = true;
+      var res = document.getElementById("res-a1");
+      res.textContent = "";
+      res.className = "resultado";
+      guardar();
+      refrescar();
+    });
+
+    fila.appendChild(p);
+    fila.appendChild(sel);
+    fila.appendChild(fb);
+    contA1.appendChild(fila);
+    refsA1.push({ fila: fila, sel: sel, fb: fb });
+  });
+
+  function corregirA1() {
+    var ac = 0;
+    refsA1.forEach(function (ref, i) {
+      var ok = ref.sel.value === A1[i].r;
+      if (ok) ac++;
+      ref.fila.classList.toggle("bien", ok);
+      ref.fila.classList.toggle("mal", !ok);
+      var prefijo = ok ? "Correcto. " : (ref.sel.value === "" ? "Sin responder. " : "No exactamente. ");
+      ref.fb.textContent = prefijo + A1[i].e;
+      ref.fb.className = "fb " + (ok ? "ok" : "mal");
+      ref.fb.hidden = false;
+    });
+    estado.a1res = ac;
+    var res = document.getElementById("res-a1");
+    res.textContent = "Has acertado " + ac + " de 10.";
+    res.className = "resultado " + (ac === 10 ? "ok" : "medio");
+    guardar();
+    refrescar();
+  }
+
+  document.getElementById("btn-a1").addEventListener("click", corregirA1);
+
+  /* ================= ACTIVIDAD 2 ================= */
+
+  var refsA2 = [];
+  var contA2 = document.getElementById("filas-a2");
+
+  A2.forEach(function (item, i) {
+    var fila = document.createElement("div");
+    fila.className = "fila";
+
+    var p = document.createElement("p");
+    p.className = "numerada";
+    p.innerHTML = '<span class="orden">' + (i + 1) + '.</span> ';
+    p.appendChild(document.createTextNode(item.s));
+
+    var control = document.createElement("div");
+    control.className = "vf";
+    var radios = [];
+
+    [["v", "Verdadero"], ["f", "Falso"]].forEach(function (par) {
+      var lab = document.createElement("label");
+      var r = document.createElement("input");
+      r.type = "radio";
+      r.name = "a2-" + i;
+      r.value = par[0];
+      var sp = document.createElement("span");
+      sp.textContent = par[1];
+      lab.appendChild(r);
+      lab.appendChild(sp);
+      control.appendChild(lab);
+
+      if (estado.a2[i] === par[0]) {
+        r.checked = true;
+        lab.classList.add("elegida");
+      }
+
+      r.addEventListener("change", function () {
+        if (r.checked) {
+          estado.a2[i] = par[0];
+          estado.a2res = -1;
+          fila.classList.remove("bien", "mal");
+          fb.hidden = true;
+          var res = document.getElementById("res-a2");
+          res.textContent = "";
+          res.className = "resultado";
+          control.querySelectorAll("label").forEach(function (l) {
+            l.classList.toggle("elegida", l.querySelector("input").checked);
+          });
+          guardar();
+          refrescar();
+        }
+      });
+      radios.push({ r: r, lab: lab });
+    });
+
+    var fb = document.createElement("p");
+    fb.className = "fb";
+    fb.hidden = true;
+
+    fila.appendChild(p);
+    fila.appendChild(control);
+    fila.appendChild(fb);
+    contA2.appendChild(fila);
+    refsA2.push({ fila: fila, radios: radios, fb: fb });
+  });
+
+  function corregirA2() {
+    var ac = 0;
+    refsA2.forEach(function (ref, i) {
+      var elegido = "";
+      ref.radios.forEach(function (par) { if (par.r.checked) elegido = par.r.value; });
+      var ok = elegido === A2[i].ok;
+      if (ok) ac++;
+      ref.fila.classList.toggle("bien", ok);
+      ref.fila.classList.toggle("mal", !ok);
+      var prefijo;
+      if (elegido === "") {
+        prefijo = "Sin responder. ";
+      } else if (ok) {
+        prefijo = A2[i].ok === "v" ? "Correcto: es verdadera. " : "Correcto: es falsa. ";
+      } else {
+        prefijo = A2[i].ok === "v" ? "Incorrecto: es verdadera. " : "Incorrecto: es falsa. ";
+      }
+      ref.fb.textContent = prefijo + A2[i].e;
+      ref.fb.className = "fb " + (ok ? "ok" : "mal");
+      ref.fb.hidden = false;
+    });
+    estado.a2res = ac;
+    var res = document.getElementById("res-a2");
+    res.textContent = "Has acertado " + ac + " de 10.";
+    res.className = "resultado " + (ac === 10 ? "ok" : "medio");
+    guardar();
+    refrescar();
+  }
+
+  document.getElementById("btn-a2").addEventListener("click", corregirA2);
+
+  /* ================= ACTIVIDAD 3 ================= */
+
+  var listaA3 = document.getElementById("lista-a3");
+  var fbA3 = document.getElementById("fb-a3");
+  var resA3 = document.getElementById("res-a3");
+  var lisA3 = {};
+
+  Object.keys(PASOS).forEach(function (k) {
+    var li = document.createElement("li");
+    li.setAttribute("data-paso", k);
+
+    var pos = document.createElement("span");
+    pos.className = "pos";
+
+    var txt = document.createElement("span");
+    txt.className = "txt";
+    txt.textContent = PASOS[k];
+
+    var mover = document.createElement("span");
+    mover.className = "mover";
+    [["-1", "Subir", "\u25B2"], ["1", "Bajar", "\u25BC"]].forEach(function (b) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "mini";
+      btn.setAttribute("data-dir", b[0]);
+      btn.setAttribute("aria-label", b[1]);
+      btn.textContent = b[2];
+      mover.appendChild(btn);
+    });
+
+    li.appendChild(pos);
+    li.appendChild(txt);
+    li.appendChild(mover);
+    listaA3.appendChild(li);
+    lisA3[k] = li;
+  });
+
+  function pintarA3() {
+    estado.a3.forEach(function (k, idx) {
+      var li = lisA3[k];
+      listaA3.appendChild(li);
+      li.querySelector(".pos").textContent = idx + 1;
+      var botones = li.querySelectorAll("button.mini");
+      botones[0].disabled = (idx === 0);
+      botones[1].disabled = (idx === estado.a3.length - 1);
+    });
+  }
+
+  listaA3.addEventListener("click", function (ev) {
+    var btn = ev.target.closest("button.mini");
+    if (!btn || btn.disabled) return;
+    var li = btn.closest("li");
+    var k = li.getAttribute("data-paso");
+    var idx = estado.a3.indexOf(k);
+    var j = idx + parseInt(btn.getAttribute("data-dir"), 10);
+    if (idx < 0 || j < 0 || j >= estado.a3.length) return;
+    var tmp = estado.a3[idx];
+    estado.a3[idx] = estado.a3[j];
+    estado.a3[j] = tmp;
+    estado.a3res = -1;
+    Object.keys(lisA3).forEach(function (x) { lisA3[x].classList.remove("bien", "mal"); });
+    fbA3.hidden = true;
+    resA3.textContent = "";
+    resA3.className = "resultado";
+    pintarA3();
+    guardar();
+    refrescar();
+  });
+
+  function corregirA3() {
+    var ac = 0;
+    estado.a3.forEach(function (k, idx) {
+      var ok = (ORDEN_OK[idx] === k);
+      if (ok) ac++;
+      lisA3[k].classList.toggle("bien", ok);
+      lisA3[k].classList.toggle("mal", !ok);
+    });
+    estado.a3res = ac;
+    resA3.textContent = "Has acertado " + ac + " de 5 posiciones.";
+    resA3.className = "resultado " + (ac === ORDEN_OK.length ? "ok" : "medio");
+    fbA3.textContent = "Orden correcto: " + ORDEN_OK.map(function (k, i) {
+      return (i + 1) + ". " + PASOS[k];
+    }).join(" \u2192 ");
+    fbA3.className = "fb fb-grande " + (ac === ORDEN_OK.length ? "ok" : "mal");
+    fbA3.hidden = false;
+    guardar();
+    refrescar();
+  }
+
+  document.getElementById("btn-a3").addEventListener("click", corregirA3);
+
+  /* ================= ACTIVIDAD 4 ================= */
+
+  var contA4 = document.getElementById("filas-a4");
+
+  A4.forEach(function (item, i) {
+    var fila = document.createElement("div");
+    fila.className = "pregunta";
+
+    var p = document.createElement("p");
+    p.className = "numerada";
+    p.innerHTML = '<span class="orden">' + (i + 1) + '.</span> ';
+    p.appendChild(document.createTextNode(item.p));
+
+    var ta = document.createElement("textarea");
+    ta.value = estado.a4[i];
+    ta.setAttribute("aria-label", "Respuesta a la pregunta " + (i + 1));
+    ta.placeholder = "Escribe aquí tu respuesta…";
+    ta.addEventListener("input", function () {
+      estado.a4[i] = ta.value;
+      guardar();
+      refrescar();
+    });
+
+    var det = document.createElement("details");
+    det.className = "propuesta";
+    var sum = document.createElement("summary");
+    sum.textContent = "Ver propuesta de respuesta";
+    var sol = document.createElement("p");
+    sol.className = "sol";
+    sol.textContent = item.e;
+    det.appendChild(sum);
+    det.appendChild(sol);
+
+    fila.appendChild(p);
+    fila.appendChild(ta);
+    fila.appendChild(det);
+    contA4.appendChild(fila);
+  });
+
+  /* ================= RESUMEN Y PROGRESO ================= */
+
+  var totalEl = document.getElementById("total");
+  var chipEls = {
+    a1: document.getElementById("chip-a1"),
+    a2: document.getElementById("chip-a2"),
+    a3: document.getElementById("chip-a3"),
+    a4: document.getElementById("chip-a4")
+  };
+
+  function respondidasA4() {
+    return estado.a4.filter(function (t) { return t.trim() !== ""; }).length;
+  }
+
+  function refrescar() {
+    var suma = 0;
+
+    [["a1", 10], ["a2", 10], ["a3", 5]].forEach(function (par) {
+      var k = par[0], max = par[1];
+      var res = estado[k + "res"];
+      var pill = document.getElementById("pill-" + k);
+      if (res < 0) {
+        pill.textContent = "\u2013/" + max;
+        pill.classList.remove("completo");
+        chipEls[k].textContent = "\u2013";
+        chipEls[k].closest(".chip").classList.remove("completo");
+      } else {
+        suma += res;
+        pill.textContent = res + "/" + max;
+        pill.classList.toggle("completo", res === max);
+        chipEls[k].textContent = res + "/" + max;
+        chipEls[k].closest(".chip").classList.toggle("completo", res === max);
+      }
+    });
+
+    var nA4 = respondidasA4();
+    document.getElementById("pill-a4").textContent = nA4 + "/8";
+    chipEls.a4.textContent = nA4 + "/8";
+
+    totalEl.textContent = suma + "/25";
+  }
+
+  /* ================= REINICIAR ================= */
+
+  document.getElementById("borrar").addEventListener("click", function () {
+    if (confirm("¿Borrar todas las respuestas? Esta acción no se puede deshacer.")) {
+      try { localStorage.removeItem(CLAVE); } catch (e) { /* sin almacenamiento */ }
+      location.reload();
+    }
+  });
+
+  /* ================= ARRANQUE ================= */
+
+  pintarA3();
+  if (estado.a1res >= 0) corregirA1();
+  if (estado.a2res >= 0) corregirA2();
+  if (estado.a3res >= 0) corregirA3();
+  refrescar();
+})();
+</script>
+
+</body>
+</html>

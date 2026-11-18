@@ -13,12 +13,12 @@ El temario está en `temas.md`. No hay contenido duplicado: la web lee ese archi
 - la portada con una tarjeta por apartado;
 - una página por apartado (`/tema/1`, `/tema/2`, …);
 - una vista de temario completo para imprimir (`/imprimir`);
-- una página de actividades (`/actividades`), generada desde `actividades.md`;
-- un checklist interactivo (`/checklist.html`), servido desde `public/`.
+- una página de actividades interactivas (`/actividades`), servida desde `public/actividades/index.html`;
+- un checklist interactivo (`/checklist.html`), servido desde `public/checklist.html`.
 
 Para editar el temario, modifica `temas.md` manteniendo los encabezados `## 1. Título`, `## 2. Título`, etc. El bloque anterior al apartado 1 se usa como cabecera de la portada.
 
-Las actividades se editan en `actividades.md` con Markdown estándar. El checklist es una página HTML independiente en `public/checklist.html`.
+Las actividades se editan en `public/actividades/index.html`. El checklist es otra página HTML independiente en `public/checklist.html`.
 
 ## Desarrollo local
 
