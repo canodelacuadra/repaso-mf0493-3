@@ -133,14 +133,14 @@
   .vf label.elegida span { color: var(--azul-oscuro); font-weight: 600; }
 
   /* ---------- Ordenar pasos ---------- */
-  ol#lista-a3 { list-style: none; margin: 0; padding: 0; }
-  ol#lista-a3 li {
+  ol#lista-a3, ol#lista-a5 { list-style: none; margin: 0; padding: 0; }
+  ol#lista-a3 li, ol#lista-a5 li {
     display: flex; align-items: center; gap: 10px;
     padding: 10px 14px; border-bottom: 1px dashed var(--borde);
   }
-  ol#lista-a3 li:last-child { border-bottom: none; }
-  ol#lista-a3 li.bien { box-shadow: inset 4px 0 0 0 var(--verde); }
-  ol#lista-a3 li.mal { box-shadow: inset 4px 0 0 0 var(--rojo); }
+  ol#lista-a3 li:last-child, ol#lista-a5 li:last-child { border-bottom: none; }
+  ol#lista-a3 li.bien, ol#lista-a5 li.bien { box-shadow: inset 4px 0 0 0 var(--verde); }
+  ol#lista-a3 li.mal, ol#lista-a5 li.mal { box-shadow: inset 4px 0 0 0 var(--rojo); }
   .pos {
     width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
     background: #eef2f7; color: var(--azul-oscuro); font-weight: 700;
@@ -148,7 +148,7 @@
   }
   li.bien .pos { background: var(--verde); color: #fff; }
   li.mal .pos { background: var(--rojo); color: #fff; }
-  ol#lista-a3 .txt { flex: 1; font-size: .93rem; }
+  ol#lista-a3 .txt, ol#lista-a5 .txt { flex: 1; font-size: .93rem; }
   .mover { display: flex; gap: 6px; flex-shrink: 0; }
   .mini {
     width: 36px; height: 36px; border: 1px solid var(--borde); border-radius: 8px;
@@ -235,8 +235,9 @@
       <a class="chip" href="#act2">2 · Verdadero o falso <strong id="chip-a2">–</strong></a>
       <a class="chip" href="#act3">3 · Ordenar pasos <strong id="chip-a3">–</strong></a>
       <a class="chip" href="#act4">4 · Caso práctico <strong id="chip-a4">–</strong></a>
+      <a class="chip" href="#act5">5 · Flujo de Git <strong id="chip-a5">–</strong></a>
     </div>
-    <p class="total-line">Puntuación autoevaluable: <strong id="total">0/25</strong><span class="nota"> · la actividad 4 se revisa en clase</span></p>
+    <p class="total-line">Puntuación autoevaluable: <strong id="total">0/30</strong><span class="nota"> · la actividad 4 se revisa en clase</span></p>
     <div class="acciones">
       <button type="button" id="borrar" class="btn peligro">Borrar todas mis respuestas</button>
     </div>
@@ -307,6 +308,21 @@
     <div id="filas-a4"></div>
     <div class="acciones">
       <span class="resultado">Responde con tus palabras y compara tu respuesta con la propuesta de cada pregunta.</span>
+    </div>
+  </section>
+
+  <section class="card" id="act5">
+    <header>
+      <span class="num">5</span>
+      <h2>Ordena el flujo de Git</h2>
+      <span class="contador-seccion" id="pill-a5">–/5</span>
+    </header>
+    <p class="enunciado">Vas a subir un cambio a GitHub. Ordena los pasos con las flechas y pulsa «Comprobar».</p>
+    <ol id="lista-a5"></ol>
+    <p class="fb fb-grande" id="fb-a5" hidden></p>
+    <div class="acciones">
+      <button type="button" class="btn" id="btn-a5">Comprobar</button>
+      <span class="resultado" id="res-a5"></span>
     </div>
   </section>
 
@@ -397,6 +413,16 @@
   var ORDEN_OK = ["crear", "github", "netlify", "publicar", "comprobar"];
   var ORDEN_INICIAL = ["github", "publicar", "netlify", "comprobar", "crear"];
 
+  var PASOS_GIT = {
+    editar: "Editas un archivo del proyecto.",
+    status: "Ejecutas git status para ver qué ha cambiado.",
+    add: "Preparas los cambios con git add.",
+    commit: "Guardas la instantánea con git commit.",
+    push: "Subes los commits con git push."
+  };
+  var ORDEN_GIT_OK = ["editar", "status", "add", "commit", "push"];
+  var ORDEN_GIT_INICIAL = ["commit", "editar", "push", "status", "add"];
+
   var A4 = [
     { p: "¿Qué CMS podríamos utilizar?",
       e: "WordPress, un CMS que permite crear y gestionar la web sin programar." },
@@ -427,7 +453,8 @@
       a1: arr(10), a1res: -1,
       a2: arr(10), a2res: -1,
       a3: ORDEN_INICIAL.slice(), a3res: -1,
-      a4: arr(8)
+      a4: arr(8),
+      a5: ORDEN_GIT_INICIAL.slice(), a5res: -1
     };
   }
 
@@ -445,6 +472,9 @@
             d.a3.every(function (k) { return PASOS.hasOwnProperty(k); })) estado.a3 = d.a3.slice();
         if (typeof d.a3res === "number") estado.a3res = d.a3res;
         if (Array.isArray(d.a4) && d.a4.length === 8) estado.a4 = d.a4.map(function (x) { return typeof x === "string" ? x : ""; });
+        if (Array.isArray(d.a5) && d.a5.length === 5 &&
+            d.a5.every(function (k) { return PASOS_GIT.hasOwnProperty(k); })) estado.a5 = d.a5.slice();
+        if (typeof d.a5res === "number") estado.a5res = d.a5res;
       }
     }
   } catch (e) {
@@ -713,6 +743,97 @@
 
   document.getElementById("btn-a3").addEventListener("click", corregirA3);
 
+  /* ================= ACTIVIDAD 5 ================= */
+
+  var listaA5 = document.getElementById("lista-a5");
+  var fbA5 = document.getElementById("fb-a5");
+  var resA5 = document.getElementById("res-a5");
+  var lisA5 = {};
+
+  Object.keys(PASOS_GIT).forEach(function (k) {
+    var li = document.createElement("li");
+    li.setAttribute("data-paso", k);
+
+    var pos = document.createElement("span");
+    pos.className = "pos";
+
+    var txt = document.createElement("span");
+    txt.className = "txt";
+    txt.textContent = PASOS_GIT[k];
+
+    var mover = document.createElement("span");
+    mover.className = "mover";
+    [["-1", "Subir", "\u25B2"], ["1", "Bajar", "\u25BC"]].forEach(function (b) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "mini";
+      btn.setAttribute("data-dir", b[0]);
+      btn.setAttribute("aria-label", b[1]);
+      btn.textContent = b[2];
+      mover.appendChild(btn);
+    });
+
+    li.appendChild(pos);
+    li.appendChild(txt);
+    li.appendChild(mover);
+    listaA5.appendChild(li);
+    lisA5[k] = li;
+  });
+
+  function pintarA5() {
+    estado.a5.forEach(function (k, idx) {
+      var li = lisA5[k];
+      listaA5.appendChild(li);
+      li.querySelector(".pos").textContent = idx + 1;
+      var botones = li.querySelectorAll("button.mini");
+      botones[0].disabled = (idx === 0);
+      botones[1].disabled = (idx === estado.a5.length - 1);
+    });
+  }
+
+  listaA5.addEventListener("click", function (ev) {
+    var btn = ev.target.closest("button.mini");
+    if (!btn || btn.disabled) return;
+    var li = btn.closest("li");
+    var k = li.getAttribute("data-paso");
+    var idx = estado.a5.indexOf(k);
+    var j = idx + parseInt(btn.getAttribute("data-dir"), 10);
+    if (idx < 0 || j < 0 || j >= estado.a5.length) return;
+    var tmp = estado.a5[idx];
+    estado.a5[idx] = estado.a5[j];
+    estado.a5[j] = tmp;
+    estado.a5res = -1;
+    Object.keys(lisA5).forEach(function (x) { lisA5[x].classList.remove("bien", "mal"); });
+    fbA5.hidden = true;
+    resA5.textContent = "";
+    resA5.className = "resultado";
+    pintarA5();
+    guardar();
+    refrescar();
+  });
+
+  function corregirA5() {
+    var ac = 0;
+    estado.a5.forEach(function (k, idx) {
+      var ok = (ORDEN_GIT_OK[idx] === k);
+      if (ok) ac++;
+      lisA5[k].classList.toggle("bien", ok);
+      lisA5[k].classList.toggle("mal", !ok);
+    });
+    estado.a5res = ac;
+    resA5.textContent = "Has acertado " + ac + " de 5 posiciones.";
+    resA5.className = "resultado " + (ac === ORDEN_GIT_OK.length ? "ok" : "medio");
+    fbA5.textContent = "Orden correcto: " + ORDEN_GIT_OK.map(function (k, i) {
+      return (i + 1) + ". " + PASOS_GIT[k];
+    }).join(" \u2192 ");
+    fbA5.className = "fb fb-grande " + (ac === ORDEN_GIT_OK.length ? "ok" : "mal");
+    fbA5.hidden = false;
+    guardar();
+    refrescar();
+  }
+
+  document.getElementById("btn-a5").addEventListener("click", corregirA5);
+
   /* ================= ACTIVIDAD 4 ================= */
 
   var contA4 = document.getElementById("filas-a4");
@@ -759,7 +880,8 @@
     a1: document.getElementById("chip-a1"),
     a2: document.getElementById("chip-a2"),
     a3: document.getElementById("chip-a3"),
-    a4: document.getElementById("chip-a4")
+    a4: document.getElementById("chip-a4"),
+    a5: document.getElementById("chip-a5")
   };
 
   function respondidasA4() {
@@ -769,7 +891,7 @@
   function refrescar() {
     var suma = 0;
 
-    [["a1", 10], ["a2", 10], ["a3", 5]].forEach(function (par) {
+    [["a1", 10], ["a2", 10], ["a3", 5], ["a5", 5]].forEach(function (par) {
       var k = par[0], max = par[1];
       var res = estado[k + "res"];
       var pill = document.getElementById("pill-" + k);
@@ -791,7 +913,7 @@
     document.getElementById("pill-a4").textContent = nA4 + "/8";
     chipEls.a4.textContent = nA4 + "/8";
 
-    totalEl.textContent = suma + "/25";
+    totalEl.textContent = suma + "/30";
   }
 
   /* ================= REINICIAR ================= */
@@ -806,9 +928,11 @@
   /* ================= ARRANQUE ================= */
 
   pintarA3();
+  pintarA5();
   if (estado.a1res >= 0) corregirA1();
   if (estado.a2res >= 0) corregirA2();
   if (estado.a3res >= 0) corregirA3();
+  if (estado.a5res >= 0) corregirA5();
   refrescar();
 })();
 </script>

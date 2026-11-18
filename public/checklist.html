@@ -116,6 +116,7 @@
   ul.items input[type="checkbox"]:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
   .texto { flex: 1; transition: color .15s; }
   li.done .texto { text-decoration: line-through; color: var(--verde-texto); }
+  code { font-size: .9em; background: #f1f5f9; border-radius: 4px; padding: 1px 4px; }
 
   /* ---------- Puntos débiles ---------- */
   .pista { margin: 0; padding: 12px 14px 0; color: var(--suave); font-size: .9rem; }
@@ -172,7 +173,7 @@
     <h1>Mi repaso del módulo 3</h1>
     <p class="sub">Checklist de autoevaluación · Tu progreso se guarda automáticamente en este navegador</p>
     <div class="meta-progreso">
-      <span id="contador">0/43</span>
+      <span id="contador">0/53</span>
       <span id="porcentaje">0 %</span>
     </div>
     <div class="barra"><div class="relleno" id="relleno"></div></div>
@@ -282,6 +283,26 @@
       <li><label><input type="checkbox" data-clave="filezilla"><span class="texto">Sé qué es FileZilla.</span></label></li>
       <li><label><input type="checkbox" data-clave="git-github"><span class="texto">Distingo Git y GitHub.</span></label></li>
       <li><label><input type="checkbox" data-clave="netlify"><span class="texto">Comprendo cómo funciona Netlify.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" data-seccion="7">
+    <header>
+      <span class="num">7</span>
+      <h2>Git básico</h2>
+      <span class="contador-seccion">0/10</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="git-repositorio"><span class="texto">Sé qué es un repositorio y para qué sirve.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-staging-commit"><span class="texto">Distingo directorio de trabajo, staging y commit.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-status"><span class="texto">Sé usar <code>git status</code> para ver qué ha cambiado.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-add"><span class="texto">Sé preparar cambios con <code>git add</code>.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-commit"><span class="texto">Sé crear un commit con un mensaje claro.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-log"><span class="texto">Sé consultar el historial con <code>git log</code>.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-push-pull"><span class="texto">Sé subir y traer cambios con <code>git push</code> y <code>git pull</code>.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-ramas"><span class="texto">Sé qué es una rama y cuándo usarla.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-reset-hard"><span class="texto">Sé qué hace <code>git reset --hard</code> y qué riesgo tiene.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-gitignore"><span class="texto">Sé qué archivos deben ir en <code>.gitignore</code>.</span></label></li>
     </ul>
   </section>
 

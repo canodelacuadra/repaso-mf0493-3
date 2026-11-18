@@ -15,6 +15,7 @@
 - [5. SEO: hacer que nos encuentren](#5-seo-hacer-que-nos-encuentren)
 - [6. Seguridad, HTTPS y RGPD](#6-seguridad-https-y-rgpd)
 - [7. Publicación y despliegue de una web](#7-publicación-y-despliegue-de-una-web)
+- [8. Uso básico de Git](#8-uso-básico-de-git)
 
 ## 1. ¿Qué tipo de web vamos a crear?
 
@@ -299,11 +300,8 @@ Una web no está terminada cuando funciona en nuestro ordenador. Si queremos que
 
 ### ¿Qué hace cada herramienta?
 
-**Git**  
-Controla los cambios realizados en los archivos de un proyecto.
-
-**GitHub**  
-Almacena y comparte repositorios de código en Internet.
+**Git y GitHub**  
+Git controla los cambios en local y GitHub aloja la copia remota. Su uso diario se repasa en el apartado 8.
 
 **Netlify**  
 Permite desplegar y publicar webs, por ejemplo desde un repositorio Git.
@@ -329,4 +327,87 @@ Permite transferir archivos entre nuestro ordenador y un servidor compatible.
 - ¿Para qué sirve FileZilla?
 - ¿Qué hace Netlify?
 - ¿Qué diferencia hay entre trabajar en local y publicar en Internet?
+
+## 8. Uso básico de Git
+
+Git es un sistema de control de versiones que guarda el historial de cambios de un proyecto. GitHub aloja una copia remota. En el apartado 7 vimos dónde encaja dentro de la publicación; aquí repasamos el uso diario.
+
+### Conceptos clave
+
+| Concepto | Qué es |
+| --- | --- |
+| Repositorio | Carpeta del proyecto con su historial (`.git`) |
+| Directorio de trabajo | Los archivos tal como los editamos |
+| Staging (índice) | Zona donde preparamos lo que irá al próximo commit |
+| Commit | Instantánea de los cambios con un mensaje |
+| Rama | Línea de trabajo independiente |
+| Remoto (`origin`) | Copia del repositorio en GitHub u otro servidor |
+
+### El flujo básico
+
+> Editar → `git status` → `git add` → `git commit` → `git push`
+
+| Comando | Qué hace | Cuándo usarlo |
+| --- | --- | --- |
+| `git init` | Crea el repositorio | Al empezar un proyecto |
+| `git clone <url>` | Copia un repositorio remoto | Al incorporarte a un proyecto |
+| `git status` | Muestra el estado de los archivos | Antes y después de cada paso |
+| `git add <archivo>` / `git add .` | Prepara cambios para el commit | Tras revisar qué vas a subir |
+| `git commit -m "mensaje"` | Guarda una instantánea | Cada cambio con sentido |
+| `git log --oneline` | Muestra el historial resumido | Para revisar qué se hizo |
+| `git push` | Sube los commits al remoto | Para compartir |
+| `git pull` | Trae los cambios del remoto | Antes de empezar a trabajar |
+
+### Ramas
+
+Una rama permite trabajar en una funcionalidad sin tocar `main`.
+
+| Comando | Qué hace |
+| --- | --- |
+| `git branch` | Lista las ramas |
+| `git switch -c nombre` | Crea una rama y cambia a ella |
+| `git switch main` | Vuelve a la rama principal |
+| `git merge nombre` | Integra la rama en la actual |
+
+> **Uso típico:** una rama por funcionalidad; cuando está terminada, se integra en `main`.
+
+### Deshacer cambios con `git reset --hard`
+
+`git reset --hard` devuelve el repositorio al estado del último commit: elimina los cambios no confirmados del directorio de trabajo y del staging.
+
+`git reset --hard HEAD~1` además mueve la rama al commit anterior, como si el último commit no se hubiera hecho.
+
+| Situación | Comando | Resultado |
+| --- | --- | --- |
+| Cambios sin confirmar (en staging o solo en el archivo) | `git reset --hard` | Vuelve al último commit y descarta esos cambios |
+| Último commit todavía sin subir | `git reset --hard HEAD~1` | Elimina el commit y sus cambios |
+| Commit ya subido a GitHub | No usar `reset --hard` | Cambiaría el historial que ya tienen los demás |
+
+> **Cuidado:** los cambios descartados no se pueden recuperar y `reset --hard` tampoco elimina los archivos nuevos que Git no sigue. Úsalo solo cuando estés seguro y nunca sobre commits que ya has compartido.
+
+### Archivos que no deben subirse
+
+Antes del primer commit conviene crear un archivo `.gitignore` con lo que no queremos versionar:
+
+- `node_modules/` (dependencias que se reinstalan con `npm install`).
+- `dist/` (archivos generados al compilar).
+- `.env` (datos y contraseñas).
+
+### Errores típicos
+
+- "not a git repository" → carpeta incorrecta o falta `git init`.
+- "nothing to commit" → no hay cambios o falta `git add`.
+- Conflicto al hacer `git pull` → resolver las marcas, `git add` y `git commit`.
+- ¿Qué he cambiado? → `git status` y `git diff`.
+- Subí `node_modules/` → añadirlo a `.gitignore`.
+
+### Recordamos
+
+- ¿Qué diferencia hay entre Git y GitHub?
+- ¿Qué pasos hay desde que editas un archivo hasta que lo subes?
+- ¿Qué hace `git add`? ¿Y `git commit`?
+- ¿Para qué sirve `git status`?
+- ¿Qué es una rama y cuándo crearías una?
+- ¿Qué hace `git reset --hard` y qué riesgo tiene?
+- ¿Qué archivos incluirías en `.gitignore`?
 
