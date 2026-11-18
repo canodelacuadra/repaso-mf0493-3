@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { marked } from 'marked';
+import actividadesRaw from '../../actividades.md?raw';
+
+const html = marked.parse(actividadesRaw.replace(/\r\n/g, '\n'), { gfm: true });
+---
+
+<BaseLayout titulo="Actividades de repaso · Repaso MF0493_3">
+  <p class="aviso-pantalla">
+    Actividades para practicar sin ordenador. Puedes imprimirlas con
+    <kbd>Ctrl</kbd> + <kbd>P</kbd> y completarlas en papel.
+  </p>
+
+  <article class="apartado contenido-markdown" set:html={html} />
+</BaseLayout>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Repaso MF0493_3">
+  <rect width="64" height="64" rx="14" fill="#12344e" />
+  <rect x="12" y="15" width="19" height="35" rx="4" fill="#f5f7fa" />
+  <rect x="33" y="15" width="19" height="35" rx="4" fill="#bcd4e6" />
+  <path d="M18 23h8M18 29h8M18 35h6M38 23h8M38 29h8M38 35h6"
+        stroke="#12344e" stroke-width="2" stroke-linecap="round" />
+</svg>

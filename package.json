@@ -10,7 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.4.12",
     "marked": "^18.2.1"
+  },
+  "devDependencies": {
+    "astro": "^7.4.12"
+  },
+  "engines": {
+    "node": ">=22.23.4"
   }
 }

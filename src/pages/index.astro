@@ -9,9 +9,10 @@ const url = (ruta: string) => (ruta === '/' ? `${base}/` : `${base}${ruta}/`);
 <BaseLayout titulo="Repaso · MF0493_3 — Implantación de aplicaciones web">
   <section class="hero" set:html={introduccion} />
 
-  <h2 id="temas" class="seccion-titulo">Los 8 apartados</h2>
+  <h2 id="temas" class="seccion-titulo">Los {temas.length} apartados</h2>
   <p class="seccion-intro">
-    Elige un apartado para repasarlo. También puedes
+    Elige un apartado para repasarlo o practica con las{' '}
+    <a href={url('/actividades')}>actividades</a>. También puedes{' '}
     <a href={url('/imprimir')}>imprimir el temario completo</a>.
   </p>
 

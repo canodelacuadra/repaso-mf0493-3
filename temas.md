@@ -15,7 +15,6 @@
 - [5. SEO: hacer que nos encuentren](#5-seo-hacer-que-nos-encuentren)
 - [6. Seguridad, HTTPS y RGPD](#6-seguridad-https-y-rgpd)
 - [7. Publicación y despliegue de una web](#7-publicación-y-despliegue-de-una-web)
-- [8. Web estática, React y Astro](#8-web-estática-react-y-astro)
 
 ## 1. ¿Qué tipo de web vamos a crear?
 
@@ -30,6 +29,47 @@ Antes de utilizar herramientas, debemos saber qué queremos construir.
 | CMS | Permite gestionar contenidos sin programar cada página | WordPress |
 | Ecommerce | Permite mostrar productos, gestionar pedidos y vender | WooCommerce |
 | SPA | Aplicación que cambia vistas sin recargar completamente la página | Aplicación con React |
+
+### Tecnologías para crear webs
+
+En los últimos días hemos conocido otras formas de crear sitios web. No debemos confundir las herramientas ni pensar que todas sirven exactamente para lo mismo.
+
+| Tecnología | ¿Qué es? | ¿Para qué se utiliza? |
+| --- | --- | --- |
+| HTML | Lenguaje de marcado | Estructurar contenidos |
+| CSS | Lenguaje de estilos | Diseñar y dar formato |
+| JavaScript | Lenguaje de programación | Añadir interactividad |
+| React | Biblioteca de JavaScript | Crear interfaces interactivas |
+| WordPress | CMS | Gestionar webs y contenidos |
+| Astro | Framework web | Crear webs rápidas, especialmente de contenido |
+| SSG | Técnica de generación estática | Generar HTML antes de que el usuario solicite la página |
+
+### Astro
+
+Astro permite crear webs que pueden generar páginas HTML estáticas previamente, en lugar de construir todo el contenido en el navegador cada vez que un usuario accede.
+
+Esto resulta especialmente interesante para:
+
+- Webs corporativas.
+- Blogs.
+- Documentación.
+- Landing pages.
+- Webs con mucho contenido y poca interacción compleja.
+
+> **No necesitamos memorizar**
+>
+> - Comandos de Astro.
+> - Configuración avanzada.
+> - Sintaxis de componentes.
+> - Programación avanzada.
+
+> **Sí debemos comprender**
+>
+> - Que existen diferentes herramientas para construir webs.
+> - Que WordPress es un CMS y Astro es un framework.
+> - Que React se utiliza para crear interfaces.
+> - Que una web estática puede ser rápida, sencilla de alojar y eficiente.
+> - Que la elección de la tecnología depende del proyecto.
 
 ### Recordamos
 
@@ -288,45 +328,4 @@ Permite transferir archivos entre nuestro ordenador y un servidor compatible.
 - ¿Para qué sirve FileZilla?
 - ¿Qué hace Netlify?
 - ¿Qué diferencia hay entre trabajar en local y publicar en Internet?
-
-## 8. Web estática, React y Astro
-
-En los últimos días hemos conocido otras formas de crear sitios web. No debemos confundir las herramientas ni pensar que todas sirven exactamente para lo mismo.
-
-| Tecnología | ¿Qué es? | ¿Para qué se utiliza? |
-| --- | --- | --- |
-| HTML | Lenguaje de marcado | Estructurar contenidos |
-| CSS | Lenguaje de estilos | Diseñar y dar formato |
-| JavaScript | Lenguaje de programación | Añadir interactividad |
-| React | Biblioteca de JavaScript | Crear interfaces interactivas |
-| WordPress | CMS | Gestionar webs y contenidos |
-| Astro | Framework web | Crear webs rápidas, especialmente de contenido |
-| SSG | Técnica de generación estática | Generar HTML antes de que el usuario solicite la página |
-
-### Astro
-
-Astro permite crear webs que pueden generar páginas HTML estáticas previamente, en lugar de construir todo el contenido en el navegador cada vez que un usuario accede.
-
-Esto resulta especialmente interesante para:
-
-- Webs corporativas.
-- Blogs.
-- Documentación.
-- Landing pages.
-- Webs con mucho contenido y poca interacción compleja.
-
-> **No necesitamos memorizar**
->
-> - Comandos de Astro.
-> - Configuración avanzada.
-> - Sintaxis de componentes.
-> - Programación avanzada.
-
-> **Sí debemos comprender**
->
-> - Que existen diferentes herramientas para construir webs.
-> - Que WordPress es un CMS y Astro es un framework.
-> - Que React se utiliza para crear interfaces.
-> - Que una web estática puede ser rápida, sencilla de alojar y eficiente.
-> - Que la elección de la tecnología depende del proyecto.
 

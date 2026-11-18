@@ -1,20 +1,24 @@
-ACTIVIDAD DE REPASO 
+# Actividades de repaso
 
-Actividad 1 · ¿Qué herramienta utilizarías? 
-Plantea las siguientes situaciones y que respondan individualmente en papel o verbalmente.
-Situación	¿Qué utilizarías?
-Quiero crear una tienda online en WordPress	
-Quiero añadir un formulario de contacto	
-Quiero transferir archivos a un servidor	
-Quiero publicar una web estática	
-Quiero gestionar versiones de mi código	
-Quiero crear descuentos para mis clientes	
-Quiero mejorar el posicionamiento de mi web	
-Quiero proteger los datos que envían los usuarios	
-Quiero gestionar noticias de mi empresa	
-Quiero desplegar una web desde GitHub	
+## Actividad 1 · ¿Qué herramienta utilizarías?
 
-Actividad 2 · Verdadero o falso 
+Plantea las siguientes situaciones y responde individualmente en papel o verbalmente.
+
+| Situación | ¿Qué utilizarías? |
+| --- | --- |
+| Quiero crear una tienda online en WordPress | |
+| Quiero añadir un formulario de contacto | |
+| Quiero transferir archivos a un servidor | |
+| Quiero publicar una web estática | |
+| Quiero gestionar versiones de mi código | |
+| Quiero crear descuentos para mis clientes | |
+| Quiero mejorar el posicionamiento de mi web | |
+| Quiero proteger los datos que envían los usuarios | |
+| Quiero gestionar noticias de mi empresa | |
+| Quiero desplegar una web desde GitHub | |
+
+## Actividad 2 · Verdadero o falso
+
 1. WordPress es un CMS.
 2. Un plugin sirve principalmente para cambiar los colores de la web.
 3. WooCommerce permite crear tiendas online.
@@ -26,20 +30,22 @@ Actividad 2 · Verdadero o falso
 9. Una copia de seguridad sirve para recuperar información en caso de pérdida.
 10. Astro es un gestor de bases de datos.
 
-Actividad 3 · Ordena el proceso 
-Una empresa quiere crear y publicar una web estática.
+## Actividad 3 · Ordena el proceso
 
-Ordena los pasos:
+Una empresa quiere crear y publicar una web estática. Ordena los pasos:
+
 - ___ Publicar la web.
 - ___ Crear los archivos HTML, CSS y JS.
 - ___ Comprobar que la web funciona correctamente.
 - ___ Subir el proyecto a GitHub.
 - ___ Desplegar el proyecto utilizando Netlify.
 
-Actividad 4 · Caso práctico final 
+## Actividad 4 · Caso práctico final
+
 Una pequeña empresa de informática quiere crear una web para presentar sus servicios y vender algunos productos.
 
 La web debe tener:
+
 - Una página de inicio.
 - Una página de contacto.
 - Un catálogo de productos.
@@ -48,7 +54,9 @@ La web debe tener:
 - Descuentos para clientes.
 - Una web segura.
 - Posibilidad de aparecer en Google.
-Preguntas:
+
+### Preguntas
+
 1. ¿Qué CMS podríamos utilizar?
 2. ¿Qué plugin nos permitiría crear la tienda?
 3. ¿Cómo podríamos añadir un formulario?

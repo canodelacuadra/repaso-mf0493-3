@@ -8,13 +8,17 @@ Generada con [Astro](https://astro.build/) y publicada en GitHub Pages en:
 
 ## Contenido
 
-Todo el material está en `temas.md`. No hay contenido duplicado: la web lee ese archivo y genera automáticamente:
+El temario está en `temas.md`. No hay contenido duplicado: la web lee ese archivo y genera automáticamente:
 
-- la portada con las 8 tarjetas;
-- una página por apartado (`/tema/1` … `/tema/8`);
-- una vista de temario completo para imprimir (`/imprimir`).
+- la portada con una tarjeta por apartado;
+- una página por apartado (`/tema/1`, `/tema/2`, …);
+- una vista de temario completo para imprimir (`/imprimir`);
+- una página de actividades (`/actividades`), generada desde `actividades.md`;
+- un checklist interactivo (`/checklist.html`), servido desde `public/`.
 
 Para editar el temario, modifica `temas.md` manteniendo los encabezados `## 1. Título`, `## 2. Título`, etc. El bloque anterior al apartado 1 se usa como cabecera de la portada.
+
+Las actividades se editan en `actividades.md` con Markdown estándar. El checklist es una página HTML independiente en `public/checklist.html`.
 
 ## Desarrollo local
 
