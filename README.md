@@ -34,20 +34,11 @@ npm run preview
 
 ## Publicación
 
-El proyecto sirve tanto para GitHub Pages como para Netlify. La ruta base se decide sola:
-GitHub Pages usa `/repaso-mf0493-3/` y Netlify publica en la raíz.
+El repositorio está configurado para publicar automáticamente en GitHub Pages:
 
-### Netlify
+1. En el repositorio, entra en **Settings → Pages**.
+2. En **Build and deployment → Source**, elige **GitHub Actions**.
 
-El archivo `netlify.toml` ya trae el comando de construcción (`npm run build`) y el
-directorio `dist/`. En Netlify solo hay que importar el repositorio; la variable
-`URL` que Netlify define automáticamente se usa para las URLs absolutas.
-
-### GitHub Pages
-
-1. Sube los cambios a la rama `main`.
-2. En el repositorio, entra en **Settings → Pages**.
-3. En **Build and deployment → Source**, elige **GitHub Actions**.
-
-El workflow `.github/workflows/deploy.yml` construye con `GITHUB_PAGES=true` y publica
-`dist/`. Si cambias el nombre del repositorio, actualiza la ruta base en `astro.config.mjs`.
+El workflow `.github/workflows/deploy.yml` construye el sitio y publica `dist/` en cada
+`push` a `main`. La URL resultante es <https://canodelacuadra.github.io/repaso-mf0493-3/>.
+Si cambias el nombre del repositorio, actualiza `site` y `base` en `astro.config.mjs`.

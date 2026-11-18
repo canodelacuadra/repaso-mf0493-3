@@ -35,8 +35,6 @@ jobs:
 
       - name: Construir el sitio
         run: npm run build
-        env:
-          GITHUB_PAGES: 'true'
 
       - name: Subir el artefacto
         uses: actions/upload-pages-artifact@v3
