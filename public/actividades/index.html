@@ -158,6 +158,67 @@
   .mini:not(:disabled):active { background: var(--azul-suave); }
   .mini:disabled { opacity: .3; cursor: default; }
 
+  /* ---------- Clasificar ---------- */
+  .fichas { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px 4px; }
+  .ficha {
+    font: inherit; font-size: .88rem; font-weight: 600;
+    padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--borde); background: #fff; color: var(--texto);
+    transition: border-color .15s, background .15s, box-shadow .15s;
+  }
+  .ficha.sel {
+    border-color: var(--azul); background: var(--azul-suave); color: var(--azul-oscuro);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, .12);
+  }
+  .ficha.bien { border-color: #86efac; background: #f0fdf4; color: var(--verde-texto); }
+  .ficha.mal { border-color: #fca5a5; background: #fef2f2; color: var(--rojo-texto); }
+  .cajas {
+    display: grid; gap: 10px; padding: 8px 14px 4px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .caja {
+    border: 1px dashed #cbd5e1; border-radius: 10px; background: #fbfdff;
+    padding: 8px 10px 10px; min-height: 76px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .caja.destino { border-color: var(--azul); background: var(--azul-suave); }
+  .caja-titulo {
+    display: block; width: 100%; text-align: left; margin: 0 0 8px; padding: 0;
+    font: inherit; font-size: .72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--suave);
+    background: none; border: 0; cursor: pointer;
+  }
+  .soltados { display: flex; flex-wrap: wrap; gap: 6px; min-height: 30px; }
+
+  /* ---------- Emparejar ---------- */
+  .parejas {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    padding: 12px 14px 4px; align-items: start;
+  }
+  @media (max-width: 560px) { .parejas { grid-template-columns: 1fr; } }
+  .columna h3 {
+    margin: 0 0 8px; font-size: .72rem; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--suave);
+  }
+  .par {
+    display: block; width: 100%; text-align: left; margin-bottom: 8px;
+    font: inherit; font-size: .86rem; line-height: 1.35;
+    padding: 10px 12px; border: 1px solid var(--borde); border-radius: 10px;
+    background: #fff; color: var(--texto); cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .par.sel {
+    border-color: var(--azul); background: var(--azul-suave);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, .12);
+  }
+  .par.fija { border-color: #86efac; background: #f0fdf4; color: var(--verde-texto); cursor: default; }
+  .par.fallo { border-color: #fca5a5; background: #fef2f2; animation: temblor .3s ease; }
+  @keyframes temblor {
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+  }
+  .par:disabled { opacity: 1; }
+
   /* ---------- Caso práctico ---------- */
   .caso { padding: 12px 14px; border-bottom: 1px dashed var(--borde); }
   .caso p { margin: 0 0 8px; font-size: .92rem; }
@@ -185,6 +246,7 @@
   .btn:active { transform: translateY(1px); }
   .btn.peligro { background: #fff; color: var(--rojo-texto); border-color: #fca5a5; }
   .btn.peligro:not(:disabled):active { background: #fef2f2; }
+  .btn.secundario { background: #fff; color: var(--azul); }
   .resultado { font-weight: 600; font-size: .9rem; }
   .resultado.ok { color: var(--verde-texto); }
   .resultado.medio { color: #b45309; }
@@ -216,7 +278,7 @@
   <div class="wrap">
     <a class="volver" href="../">← Volver al temario</a>
     <h1>Actividades interactivas · Módulo 3</h1>
-    <p class="sub">Herramientas, WordPress, WooCommerce, SEO y publicación · Tus respuestas se guardan en este navegador</p>
+    <p class="sub">Tecnologías, WordPress, WooCommerce, SEO, publicación y Git · Tus respuestas se guardan en este navegador</p>
     <noscript><p class="aviso-noscript">Esta página necesita JavaScript para las actividades interactivas y el guardado de respuestas.</p></noscript>
   </div>
 </header>
@@ -231,21 +293,39 @@
       <h2>Tu progreso</h2>
     </header>
     <div class="chips">
-      <a class="chip" href="#act1">1 · Herramientas <strong id="chip-a1">–</strong></a>
-      <a class="chip" href="#act2">2 · Verdadero o falso <strong id="chip-a2">–</strong></a>
-      <a class="chip" href="#act3">3 · Ordenar pasos <strong id="chip-a3">–</strong></a>
+      <a class="chip" href="#act6">1 · Clasifica <strong id="chip-a6">–</strong></a>
+      <a class="chip" href="#act1">2 · Herramientas <strong id="chip-a1">–</strong></a>
+      <a class="chip" href="#act2">3 · Verdadero o falso <strong id="chip-a2">–</strong></a>
       <a class="chip" href="#act4">4 · Caso práctico <strong id="chip-a4">–</strong></a>
-      <a class="chip" href="#act5">5 · Flujo de Git <strong id="chip-a5">–</strong></a>
+      <a class="chip" href="#act3">5 · Ordenar pasos <strong id="chip-a3">–</strong></a>
+      <a class="chip" href="#act5">6 · Flujo de Git <strong id="chip-a5">–</strong></a>
+      <a class="chip" href="#act7">7 · Empareja <strong id="chip-a7">–</strong></a>
     </div>
-    <p class="total-line">Puntuación autoevaluable: <strong id="total">0/30</strong><span class="nota"> · la actividad 4 se revisa en clase</span></p>
+    <p class="total-line">Puntuación autoevaluable: <strong id="total">0/45</strong><span class="nota"> · la actividad 4 se revisa en clase</span></p>
     <div class="acciones">
       <button type="button" id="borrar" class="btn peligro">Borrar todas mis respuestas</button>
     </div>
   </section>
 
-  <section class="card" id="act1">
+  <section class="card" id="act6">
     <header>
       <span class="num">1</span>
+      <h2>Clasifica la tecnología</h2>
+      <span class="contador-seccion" id="pill-a6">–/8</span>
+    </header>
+    <p class="enunciado">Toca una ficha y después la caja que le corresponde. Para cambiar una ficha ya colocada, tócala y llévala a otra caja.</p>
+    <div class="fichas" id="fichas-a6"></div>
+    <div class="cajas" id="cajas-a6"></div>
+    <p class="fb fb-grande" id="fb-a6" hidden></p>
+    <div class="acciones">
+      <button type="button" class="btn" id="btn-a6">Comprobar</button>
+      <span class="resultado" id="res-a6"></span>
+    </div>
+  </section>
+
+  <section class="card" id="act1">
+    <header>
+      <span class="num">2</span>
       <h2>¿Qué herramienta utilizarías?</h2>
       <span class="contador-seccion" id="pill-a1">–/10</span>
     </header>
@@ -259,7 +339,7 @@
 
   <section class="card" id="act2">
     <header>
-      <span class="num">2</span>
+      <span class="num">3</span>
       <h2>Verdadero o falso</h2>
       <span class="contador-seccion" id="pill-a2">–/10</span>
     </header>
@@ -268,21 +348,6 @@
     <div class="acciones">
       <button type="button" class="btn" id="btn-a2">Comprobar</button>
       <span class="resultado" id="res-a2"></span>
-    </div>
-  </section>
-
-  <section class="card" id="act3">
-    <header>
-      <span class="num">3</span>
-      <h2>Ordena el proceso</h2>
-      <span class="contador-seccion" id="pill-a3">–/5</span>
-    </header>
-    <p class="enunciado">Una empresa quiere crear y publicar una web estática. Ordena los pasos con las flechas y pulsa «Comprobar».</p>
-    <ol id="lista-a3"></ol>
-    <p class="fb fb-grande" id="fb-a3" hidden></p>
-    <div class="acciones">
-      <button type="button" class="btn" id="btn-a3">Comprobar</button>
-      <span class="resultado" id="res-a3"></span>
     </div>
   </section>
 
@@ -311,9 +376,24 @@
     </div>
   </section>
 
-  <section class="card" id="act5">
+  <section class="card" id="act3">
     <header>
       <span class="num">5</span>
+      <h2>Ordena el proceso</h2>
+      <span class="contador-seccion" id="pill-a3">–/5</span>
+    </header>
+    <p class="enunciado">Una empresa quiere crear y publicar una web estática. Ordena los pasos con las flechas y pulsa «Comprobar».</p>
+    <ol id="lista-a3"></ol>
+    <p class="fb fb-grande" id="fb-a3" hidden></p>
+    <div class="acciones">
+      <button type="button" class="btn" id="btn-a3">Comprobar</button>
+      <span class="resultado" id="res-a3"></span>
+    </div>
+  </section>
+
+  <section class="card" id="act5">
+    <header>
+      <span class="num">6</span>
       <h2>Ordena el flujo de Git</h2>
       <span class="contador-seccion" id="pill-a5">–/5</span>
     </header>
@@ -323,6 +403,30 @@
     <div class="acciones">
       <button type="button" class="btn" id="btn-a5">Comprobar</button>
       <span class="resultado" id="res-a5"></span>
+    </div>
+  </section>
+
+  <section class="card" id="act7">
+    <header>
+      <span class="num">7</span>
+      <h2>Empareja concepto y definición</h2>
+      <span class="contador-seccion" id="pill-a7">–/7</span>
+    </header>
+    <p class="enunciado">Toca un concepto y después su definición. Si aciertas, la pareja queda fijada; si fallas, se cuentan los intentos.</p>
+    <div class="parejas">
+      <div class="columna">
+        <h3>Conceptos</h3>
+        <div id="conceptos-a7"></div>
+      </div>
+      <div class="columna">
+        <h3>Definiciones</h3>
+        <div id="definiciones-a7"></div>
+      </div>
+    </div>
+    <p class="fb fb-grande" id="fb-a7" hidden></p>
+    <div class="acciones">
+      <span class="resultado" id="res-a7"></span>
+      <button type="button" class="btn secundario" id="btn-a7">Repetir</button>
     </div>
   </section>
 
@@ -423,6 +527,36 @@
   var ORDEN_GIT_OK = ["editar", "status", "add", "commit", "push"];
   var ORDEN_GIT_INICIAL = ["commit", "editar", "push", "status", "add"];
 
+  var CATS = [
+    { id: "lenguaje", nombre: "Lenguaje" },
+    { id: "biblioteca", nombre: "Biblioteca" },
+    { id: "framework", nombre: "Framework" },
+    { id: "cms", nombre: "CMS" },
+    { id: "plugin", nombre: "Plugin" },
+    { id: "tecnica", nombre: "T\u00e9cnica" }
+  ];
+  var TECNO = {
+    html: { nombre: "HTML", cat: "lenguaje" },
+    css: { nombre: "CSS", cat: "lenguaje" },
+    js: { nombre: "JavaScript", cat: "lenguaje" },
+    react: { nombre: "React", cat: "biblioteca" },
+    astro: { nombre: "Astro", cat: "framework" },
+    wordpress: { nombre: "WordPress", cat: "cms" },
+    woo: { nombre: "WooCommerce", cat: "plugin" },
+    ssg: { nombre: "SSG", cat: "tecnica" }
+  };
+
+  var PAREJAS = [
+    { id: "hosting", concepto: "Hosting", definicion: "Servicio donde se alojan los archivos de la web." },
+    { id: "dominio", concepto: "Dominio", definicion: "Nombre con el que se identifica una web en Internet." },
+    { id: "ftp", concepto: "FTP", definicion: "Protocolo para transferir archivos al servidor." },
+    { id: "staging", concepto: "Staging", definicion: "Zona donde preparas los cambios antes del commit." },
+    { id: "rama", concepto: "Rama", definicion: "L\u00ednea de trabajo independiente dentro del repositorio." },
+    { id: "remoto", concepto: "Remoto (origin)", definicion: "Copia del repositorio alojada en GitHub u otro servidor." },
+    { id: "gitignore", concepto: ".gitignore", definicion: "Archivo que indica lo que Git no debe versionar." }
+  ];
+  var ORDEN_DEF = ["dominio", "gitignore", "rama", "hosting", "staging", "ftp", "remoto"];
+
   var A4 = [
     { p: "¿Qué CMS podríamos utilizar?",
       e: "WordPress, un CMS que permite crear y gestionar la web sin programar." },
@@ -454,7 +588,9 @@
       a2: arr(10), a2res: -1,
       a3: ORDEN_INICIAL.slice(), a3res: -1,
       a4: arr(8),
-      a5: ORDEN_GIT_INICIAL.slice(), a5res: -1
+      a5: ORDEN_GIT_INICIAL.slice(), a5res: -1,
+      a6: {}, a6res: -1,
+      a7: [], a7fallos: 0, a7res: -1
     };
   }
 
@@ -475,6 +611,19 @@
         if (Array.isArray(d.a5) && d.a5.length === 5 &&
             d.a5.every(function (k) { return PASOS_GIT.hasOwnProperty(k); })) estado.a5 = d.a5.slice();
         if (typeof d.a5res === "number") estado.a5res = d.a5res;
+        if (d.a6 && typeof d.a6 === "object" && !Array.isArray(d.a6)) {
+          Object.keys(d.a6).forEach(function (k) {
+            var c = d.a6[k];
+            if (TECNO.hasOwnProperty(k) && CATS.some(function (x) { return x.id === c; })) estado.a6[k] = c;
+          });
+        }
+        if (typeof d.a6res === "number" && d.a6res >= 0 && d.a6res <= Object.keys(TECNO).length) estado.a6res = d.a6res;
+        if (Array.isArray(d.a7) && d.a7.length <= PAREJAS.length &&
+            d.a7.every(function (id) {
+              return PAREJAS.some(function (p) { return p.id === id; });
+            })) estado.a7 = d.a7.slice();
+        if (typeof d.a7fallos === "number") estado.a7fallos = d.a7fallos;
+        if (typeof d.a7res === "number" && d.a7res >= 0 && d.a7res <= PAREJAS.length) estado.a7res = d.a7res;
       }
     }
   } catch (e) {
@@ -834,6 +983,284 @@
 
   document.getElementById("btn-a5").addEventListener("click", corregirA5);
 
+  /* ================= ACTIVIDAD 6: CLASIFICAR ================= */
+
+  var fichasA6 = document.getElementById("fichas-a6");
+  var cajasA6 = document.getElementById("cajas-a6");
+  var fbA6 = document.getElementById("fb-a6");
+  var resA6 = document.getElementById("res-a6");
+  var botonesA6 = {};
+  var cajasEls = {};
+  var selA6 = null;
+
+  CATS.forEach(function (cat) {
+    var caja = document.createElement("div");
+    caja.className = "caja";
+    caja.setAttribute("data-cat", cat.id);
+
+    var h = document.createElement("button");
+    h.type = "button";
+    h.className = "caja-titulo";
+    h.setAttribute("aria-label", "Mover la ficha seleccionada a " + cat.nombre);
+    h.textContent = cat.nombre;
+
+    var lista = document.createElement("div");
+    lista.className = "soltados";
+
+    caja.appendChild(h);
+    caja.appendChild(lista);
+    cajasA6.appendChild(caja);
+    cajasEls[cat.id] = { caja: caja, lista: lista };
+
+    caja.addEventListener("click", function (ev) {
+      if (ev.target.closest(".ficha")) return;
+      colocarA6(cat.id);
+    });
+  });
+
+  Object.keys(TECNO).forEach(function (k) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "ficha";
+    b.setAttribute("data-item", k);
+    b.textContent = TECNO[k].nombre;
+    b.addEventListener("click", function () { seleccionarA6(k); });
+    fichasA6.appendChild(b);
+    botonesA6[k] = b;
+  });
+
+  function pintarA6() {
+    Object.keys(TECNO).forEach(function (k) {
+      var b = botonesA6[k];
+      var cat = estado.a6[k];
+      b.classList.remove("sel");
+      if (cat && cajasEls[cat]) {
+        cajasEls[cat].lista.appendChild(b);
+      } else {
+        fichasA6.appendChild(b);
+      }
+      if (selA6 === k) b.classList.add("sel");
+    });
+  }
+
+  function limpiarA6() {
+    Object.keys(botonesA6).forEach(function (k) {
+      botonesA6[k].classList.remove("bien", "mal");
+    });
+    estado.a6res = -1;
+    fbA6.hidden = true;
+    resA6.textContent = "";
+    resA6.className = "resultado";
+  }
+
+  function seleccionarA6(k) {
+    limpiarA6();
+    if (estado.a6[k]) {
+      delete estado.a6[k];
+      selA6 = k;
+    } else if (selA6 === k) {
+      selA6 = null;
+    } else {
+      selA6 = k;
+    }
+    pintarA6();
+    guardar();
+    refrescar();
+  }
+
+  function colocarA6(cat) {
+    if (!selA6) {
+      if (estado.a6res < 0) {
+        resA6.textContent = "Primero toca una ficha y luego su caja.";
+        resA6.className = "resultado medio";
+      }
+      return;
+    }
+    limpiarA6();
+    estado.a6[selA6] = cat;
+    selA6 = null;
+    pintarA6();
+    guardar();
+    refrescar();
+  }
+
+  function corregirA6() {
+    var ac = 0;
+    var sin = 0;
+    Object.keys(TECNO).forEach(function (k) {
+      var cat = estado.a6[k];
+      var b = botonesA6[k];
+      b.classList.remove("bien", "mal");
+      if (!cat) {
+        sin++;
+        return;
+      }
+      var ok = (cat === TECNO[k].cat);
+      if (ok) ac++;
+      b.classList.add(ok ? "bien" : "mal");
+    });
+
+    estado.a6res = ac;
+    resA6.textContent = "Has acertado " + ac + " de " + Object.keys(TECNO).length +
+      (sin ? " (" + sin + " sin clasificar)." : ".");
+    resA6.className = "resultado " + (ac === Object.keys(TECNO).length ? "ok" : "medio");
+
+    fbA6.textContent = "Clasificaci\u00f3n correcta: " + CATS.map(function (c) {
+      var nombres = Object.keys(TECNO).filter(function (k) {
+        return TECNO[k].cat === c.id;
+      }).map(function (k) {
+        return TECNO[k].nombre;
+      }).join(", ");
+      return nombres + " \u2192 " + c.nombre;
+    }).join(" \u00b7 ");
+    fbA6.className = "fb fb-grande " + (ac === Object.keys(TECNO).length ? "ok" : "mal");
+    fbA6.hidden = false;
+    guardar();
+    refrescar();
+  }
+
+  document.getElementById("btn-a6").addEventListener("click", corregirA6);
+
+  /* ================= ACTIVIDAD 7: EMPAREJAR ================= */
+
+  var contConceptos = document.getElementById("conceptos-a7");
+  var contDefiniciones = document.getElementById("definiciones-a7");
+  var fbA7 = document.getElementById("fb-a7");
+  var resA7 = document.getElementById("res-a7");
+  var botonesA7 = {};
+  var selA7 = null;
+
+  PAREJAS.forEach(function (p) {
+    var bc = document.createElement("button");
+    bc.type = "button";
+    bc.className = "par";
+    bc.setAttribute("data-id", p.id);
+    bc.textContent = p.concepto;
+    bc.addEventListener("click", function () { pulsarA7(p.id, "conc"); });
+    contConceptos.appendChild(bc);
+
+    var bd = document.createElement("button");
+    bd.type = "button";
+    bd.className = "par";
+    bd.setAttribute("data-id", p.id);
+    bd.textContent = p.definicion;
+    bd.addEventListener("click", function () { pulsarA7(p.id, "def"); });
+
+    botonesA7[p.id] = { conc: bc, def: bd };
+  });
+
+  ORDEN_DEF.forEach(function (id) {
+    contDefiniciones.appendChild(botonesA7[id].def);
+  });
+
+  function pintarA7() {
+    PAREJAS.forEach(function (p) {
+      var par = botonesA7[p.id];
+      var fija = (estado.a7.indexOf(p.id) >= 0);
+      ["conc", "def"].forEach(function (tipo) {
+        var b = par[tipo];
+        b.classList.toggle("fija", fija);
+        b.disabled = fija;
+        b.classList.remove("sel");
+      });
+    });
+    if (selA7) botonesA7[selA7.id][selA7.tipo].classList.add("sel");
+  }
+
+  function mostrarResultadoA7() {
+    var total = PAREJAS.length;
+    var fallos = estado.a7fallos;
+    resA7.textContent = fallos === 0
+      ? "Has encontrado las " + total + " parejas sin fallos."
+      : "Has encontrado las " + total + " parejas con " + fallos +
+        (fallos === 1 ? " fallo." : " fallos.");
+    resA7.className = "resultado " + (estado.a7res === total ? "ok" : "medio");
+    fbA7.textContent = estado.a7res === total
+      ? "Puntuaci\u00f3n: " + total + "/" + total + "."
+      : "Puntuaci\u00f3n: " + estado.a7res + "/" + total + " (cada fallo resta un punto).";
+    fbA7.className = "fb fb-grande " + (estado.a7res === total ? "ok" : "mal");
+    fbA7.hidden = false;
+  }
+
+  function textoSeleccionA7() {
+    if (!selA7) return "";
+    var p = PAREJAS.filter(function (x) { return x.id === selA7.id; })[0];
+    return selA7.tipo === "conc"
+      ? "Has elegido \u00ab" + p.concepto + "\u00bb. Toca su definici\u00f3n."
+      : "Has elegido una definici\u00f3n. Toca el concepto que le corresponde.";
+  }
+
+  function pulsarA7(id, tipo) {
+    if (estado.a7.indexOf(id) >= 0) return;
+
+    if (!selA7) {
+      selA7 = { id: id, tipo: tipo };
+      pintarA7();
+      resA7.textContent = textoSeleccionA7();
+      resA7.className = "resultado";
+      return;
+    }
+    if (selA7.id === id && selA7.tipo === tipo) {
+      selA7 = null;
+      pintarA7();
+      resA7.textContent = "";
+      resA7.className = "resultado";
+      return;
+    }
+    if (selA7.tipo === tipo) {
+      selA7 = { id: id, tipo: tipo };
+      pintarA7();
+      resA7.textContent = textoSeleccionA7();
+      resA7.className = "resultado";
+      return;
+    }
+
+    if (selA7.id === id) {
+      estado.a7.push(id);
+      selA7 = null;
+      pintarA7();
+      if (estado.a7.length === PAREJAS.length) {
+        estado.a7res = Math.max(0, PAREJAS.length - estado.a7fallos);
+        mostrarResultadoA7();
+      } else {
+        resA7.textContent = estado.a7.length + "/" + PAREJAS.length + " parejas" +
+          (estado.a7fallos ? " \u00b7 fallos: " + estado.a7fallos : "");
+        resA7.className = "resultado";
+      }
+      guardar();
+      refrescar();
+      return;
+    }
+
+    var a = botonesA7[selA7.id][selA7.tipo];
+    var b = botonesA7[id][tipo];
+    estado.a7fallos++;
+    a.classList.add("fallo");
+    b.classList.add("fallo");
+    selA7 = null;
+    pintarA7();
+    setTimeout(function () {
+      a.classList.remove("fallo");
+      b.classList.remove("fallo");
+    }, 450);
+    resA7.textContent = "Fallos: " + estado.a7fallos;
+    resA7.className = "resultado medio";
+    guardar();
+  }
+
+  document.getElementById("btn-a7").addEventListener("click", function () {
+    estado.a7 = [];
+    estado.a7fallos = 0;
+    estado.a7res = -1;
+    selA7 = null;
+    pintarA7();
+    fbA7.hidden = true;
+    resA7.textContent = "";
+    resA7.className = "resultado";
+    guardar();
+    refrescar();
+  });
+
   /* ================= ACTIVIDAD 4 ================= */
 
   var contA4 = document.getElementById("filas-a4");
@@ -881,7 +1308,9 @@
     a2: document.getElementById("chip-a2"),
     a3: document.getElementById("chip-a3"),
     a4: document.getElementById("chip-a4"),
-    a5: document.getElementById("chip-a5")
+    a5: document.getElementById("chip-a5"),
+    a6: document.getElementById("chip-a6"),
+    a7: document.getElementById("chip-a7")
   };
 
   function respondidasA4() {
@@ -891,7 +1320,7 @@
   function refrescar() {
     var suma = 0;
 
-    [["a1", 10], ["a2", 10], ["a3", 5], ["a5", 5]].forEach(function (par) {
+    [["a1", 10], ["a2", 10], ["a3", 5], ["a5", 5], ["a6", 8], ["a7", 7]].forEach(function (par) {
       var k = par[0], max = par[1];
       var res = estado[k + "res"];
       var pill = document.getElementById("pill-" + k);
@@ -913,7 +1342,7 @@
     document.getElementById("pill-a4").textContent = nA4 + "/8";
     chipEls.a4.textContent = nA4 + "/8";
 
-    totalEl.textContent = suma + "/30";
+    totalEl.textContent = suma + "/45";
   }
 
   /* ================= REINICIAR ================= */
@@ -927,12 +1356,21 @@
 
   /* ================= ARRANQUE ================= */
 
+  pintarA6();
   pintarA3();
   pintarA5();
+  pintarA7();
   if (estado.a1res >= 0) corregirA1();
   if (estado.a2res >= 0) corregirA2();
   if (estado.a3res >= 0) corregirA3();
   if (estado.a5res >= 0) corregirA5();
+  if (estado.a6res >= 0) corregirA6();
+  if (estado.a7res >= 0 && estado.a7.length === PAREJAS.length) {
+    mostrarResultadoA7();
+  } else if (estado.a7.length > 0) {
+    resA7.textContent = estado.a7.length + "/" + PAREJAS.length + " parejas" +
+      (estado.a7fallos ? " \u00b7 fallos: " + estado.a7fallos : "");
+  }
   refrescar();
 })();
 </script>
