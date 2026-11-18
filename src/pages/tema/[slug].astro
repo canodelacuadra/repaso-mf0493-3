@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { temas } from '../../lib/temas.js';
+
+export function getStaticPaths() {
+  return temas.map((tema) => ({
+    params: { slug: tema.slug },
+    props: { tema },
+  }));
+}
+
+const { tema } = Astro.props;
+const posicion = temas.findIndex((item) => item.numero === tema.numero);
+const anterior = temas[posicion - 1];
+const siguiente = temas[posicion + 1];
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const url = (ruta: string) => (ruta === '/' ? `${base}/` : `${base}${ruta}/`);
+---
+
+<BaseLayout
+  titulo={`${tema.numero}. ${tema.titulo} · Repaso MF0493_3`}
+  apartadoActivo={tema.numero}
+>
+  <nav class="migas" aria-label="Ruta de navegación">
+    <a href={url('/')}>Temario</a>
+    <span aria-hidden="true"> / </span>
+    <span>Apartado {tema.numero}</span>
+  </nav>
+
+  <article class="apartado">
+    <h1 class="apartado-titulo">
+      <span class="apartado-num">{String(tema.numero).padStart(2, '0')}</span>
+      {tema.titulo}
+    </h1>
+    <div class="contenido-markdown" set:html={tema.html} />
+  </article>
+
+  <nav class="pager" aria-label="Apartados anterior y siguiente">
+    {
+      anterior ? (
+        <a class="pager-anterior" href={url(`/tema/${anterior.slug}`)}>
+          ← {anterior.numero}. {anterior.titulo}
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      siguiente && (
+        <a class="pager-siguiente" href={url(`/tema/${siguiente.slug}`)}>
+          {siguiente.numero}. {siguiente.titulo} →
+        </a>
+      )
+    }
+  </nav>
+
+  <p class="accion-imprimir">
+    <a href={url('/imprimir')}>Ver e imprimir el temario completo</a>
+  </p>
+</BaseLayout>

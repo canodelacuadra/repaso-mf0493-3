@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d4ed8">
+<title>Mi repaso del módulo 3 · Checklist</title>
+<style>
+  :root {
+    --azul: #1d4ed8;
+    --azul-oscuro: #1e3a8a;
+    --azul-suave: #eff6ff;
+    --verde: #16a34a;
+    --verde-texto: #15803d;
+    --texto: #1e293b;
+    --suave: #64748b;
+    --borde: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+  /* ---------- Cabecera fija con progreso ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255, 255, 255, .97);
+    border-bottom: 1px solid var(--borde);
+    padding: 14px 0 12px;
+  }
+  h1 { margin: 0; font-size: 1.3rem; color: var(--azul-oscuro); letter-spacing: -.01em; }
+  .sub { margin: 2px 0 10px; color: var(--suave); font-size: .82rem; }
+  .meta-progreso {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: .8rem; color: var(--suave); margin-bottom: 6px;
+  }
+  #contador { font-weight: 700; color: var(--azul); font-size: .95rem; }
+  .barra {
+    height: 10px; background: #eef2f7; border-radius: 999px;
+    overflow: hidden; border: 1px solid var(--borde);
+  }
+  .relleno {
+    height: 100%; width: 0%;
+    background: var(--azul); border-radius: 999px;
+    transition: width .3s ease, background .3s ease;
+  }
+  .relleno.completo { background: var(--verde); }
+  .aviso-noscript {
+    display: none; margin: 10px 0 0; padding: 8px 12px;
+    border: 1px solid #f59e0b; border-radius: 8px;
+    background: #fffbeb; color: #92400e; font-size: .8rem;
+  }
+
+  main { padding: 20px 0 30px; }
+
+  /* ---------- Tarjetas de sección ---------- */
+  .card {
+    border: 1px solid var(--borde); border-radius: 12px;
+    margin-bottom: 18px; background: #fff; overflow: hidden;
+  }
+  .card > header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; background: var(--azul-suave);
+    border-bottom: 1px solid var(--borde);
+  }
+  .num {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: var(--azul); color: #fff; font-weight: 700;
+    display: grid; place-content: center; font-size: .95rem;
+  }
+  .num svg { display: block; }
+  .card h2 { margin: 0; font-size: .98rem; color: var(--azul-oscuro); flex: 1; line-height: 1.3; }
+  .contador-seccion {
+    font-size: .78rem; font-weight: 700; color: var(--azul);
+    background: #fff; border: 1px solid var(--borde);
+    padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .contador-seccion.completo { color: #fff; background: var(--verde); border-color: var(--verde); }
+
+  /* ---------- Ítems de la checklist ---------- */
+  ul.items { list-style: none; margin: 0; padding: 0; }
+  ul.items li { border-bottom: 1px dashed var(--borde); }
+  ul.items li:last-child { border-bottom: none; }
+  ul.items label {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px; cursor: pointer;
+    -webkit-tap-highlight-color: rgba(29, 78, 216, .08);
+  }
+  ul.items input[type="checkbox"] {
+    appearance: none; -webkit-appearance: none;
+    width: 22px; height: 22px; margin: 1px 0 0; flex-shrink: 0;
+    border: 2px solid #94a3b8; border-radius: 6px; background: #fff;
+    cursor: pointer; display: grid; place-content: center;
+    transition: background .15s, border-color .15s;
+  }
+  ul.items input[type="checkbox"]::before {
+    content: ""; width: 11px; height: 11px;
+    transform: scale(0); transition: transform .12s ease-in-out;
+    background: #fff;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+  ul.items input[type="checkbox"]:checked { background: var(--verde); border-color: var(--verde); }
+  ul.items input[type="checkbox"]:checked::before { transform: scale(1); }
+  ul.items input[type="checkbox"]:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+  .texto { flex: 1; transition: color .15s; }
+  li.done .texto { text-decoration: line-through; color: var(--verde-texto); }
+
+  /* ---------- Puntos débiles ---------- */
+  .pista { margin: 0; padding: 12px 14px 0; color: var(--suave); font-size: .9rem; }
+  .lineas { padding: 10px 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .linea { display: flex; align-items: center; gap: 10px; }
+  .linea .n { color: var(--suave); font-weight: 700; font-size: .85rem; width: 15px; flex-shrink: 0; }
+  .linea input[type="text"] {
+    flex: 1; min-width: 0; font: inherit; color: var(--texto);
+    padding: 10px 12px; border: 1px solid var(--borde); border-radius: 10px;
+    background: #fbfdff; transition: border-color .15s, box-shadow .15s;
+  }
+  .linea input[type="text"]::placeholder { color: #a8b3c5; }
+  .linea input[type="text"]:focus {
+    outline: none; border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, .12);
+  }
+
+  /* ---------- Autoevaluación ---------- */
+  .opciones { padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .opciones label {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border: 1px solid var(--borde); border-radius: 10px;
+    background: #fff; cursor: pointer; transition: border-color .15s, background .15s;
+    -webkit-tap-highlight-color: rgba(29, 78, 216, .08);
+  }
+  .opciones input[type="radio"] {
+    appearance: none; -webkit-appearance: none;
+    width: 20px; height: 20px; margin: 0; flex-shrink: 0;
+    border: 2px solid #94a3b8; border-radius: 50%; background: #fff;
+    cursor: pointer; display: grid; place-content: center;
+    transition: border-color .15s;
+  }
+  .opciones input[type="radio"]::before {
+    content: ""; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--azul); transform: scale(0); transition: transform .12s ease-in-out;
+  }
+  .opciones input[type="radio"]:checked { border-color: var(--azul); }
+  .opciones input[type="radio"]:checked::before { transform: scale(1); }
+  .opciones input[type="radio"]:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+  .opciones label.elegida { border-color: var(--azul); background: var(--azul-suave); }
+  .opciones label.elegida span { color: var(--azul-oscuro); font-weight: 600; }
+
+  footer {
+    text-align: center; color: var(--suave); font-size: .78rem;
+    padding: 6px 16px 34px;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <h1>Mi repaso del módulo 3</h1>
+    <p class="sub">Checklist de autoevaluación · Tu progreso se guarda automáticamente en este navegador</p>
+    <div class="meta-progreso">
+      <span id="contador">0/43</span>
+      <span id="porcentaje">0 %</span>
+    </div>
+    <div class="barra"><div class="relleno" id="relleno"></div></div>
+    <noscript><p class="aviso-noscript" style="display:block">Sin JavaScript el guardado automático no funciona: podrás marcar, pero no se recordará al recargar.</p></noscript>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="card" data-seccion="1">
+    <header>
+      <span class="num">1</span>
+      <h2>Conceptos de Internet y desarrollo web</h2>
+      <span class="contador-seccion">0/5</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="internet-web-intranet"><span class="texto">Sé diferenciar Internet, web e intranet.</span></label></li>
+      <li><label><input type="checkbox" data-clave="aplicacion-web"><span class="texto">Comprendo qué es una aplicación web.</span></label></li>
+      <li><label><input type="checkbox" data-clave="estatica-dinamica"><span class="texto">Sé distinguir una web estática de una dinámica.</span></label></li>
+      <li><label><input type="checkbox" data-clave="cliente-servidor"><span class="texto">Comprendo el funcionamiento básico cliente-servidor.</span></label></li>
+      <li><label><input type="checkbox" data-clave="cms"><span class="texto">Sé qué es un CMS y para qué sirve.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" data-seccion="2">
+    <header>
+      <span class="num">2</span>
+      <h2>WordPress</h2>
+      <span class="contador-seccion">0/7</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="que-es-wordpress"><span class="texto">Sé qué es WordPress.</span></label></li>
+      <li><label><input type="checkbox" data-clave="entradas-paginas"><span class="texto">Sé diferenciar entradas y páginas.</span></label></li>
+      <li><label><input type="checkbox" data-clave="imagenes-multimedia"><span class="texto">Sé gestionar imágenes y archivos multimedia.</span></label></li>
+      <li><label><input type="checkbox" data-clave="temas"><span class="texto">Comprendo qué son los temas.</span></label></li>
+      <li><label><input type="checkbox" data-clave="plugins"><span class="texto">Comprendo qué son los plugins.</span></label></li>
+      <li><label><input type="checkbox" data-clave="panel-administracion"><span class="texto">Sé identificar los principales elementos del panel de administración.</span></label></li>
+      <li><label><input type="checkbox" data-clave="usuarios-roles"><span class="texto">Comprendo los usuarios y sus roles básicos.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" data-seccion="3">
+    <header>
+      <span class="num">3</span>
+      <h2>WooCommerce</h2>
+      <span class="contador-seccion">0/7</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="que-es-woocommerce"><span class="texto">Sé qué es WooCommerce.</span></label></li>
+      <li><label><input type="checkbox" data-clave="productos-simples-variables"><span class="texto">Sé distinguir productos simples y variables.</span></label></li>
+      <li><label><input type="checkbox" data-clave="categorias-productos"><span class="texto">Sé organizar productos en categorías.</span></label></li>
+      <li><label><input type="checkbox" data-clave="gestion-pedidos"><span class="texto">Comprendo cómo se gestionan los pedidos.</span></label></li>
+      <li><label><input type="checkbox" data-clave="cupones"><span class="texto">Sé para qué sirven los cupones.</span></label></li>
+      <li><label><input type="checkbox" data-clave="pasarelas-pago"><span class="texto">Comprendo la función de las pasarelas de pago.</span></label></li>
+      <li><label><input type="checkbox" data-clave="envios-logistica"><span class="texto">Conozco los conceptos básicos de envío y logística.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" data-seccion="4">
+    <header>
+      <span class="num">4</span>
+      <h2>SEO</h2>
+      <span class="contador-seccion">0/6</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="que-es-seo"><span class="texto">Comprendo qué es el SEO.</span></label></li>
+      <li><label><input type="checkbox" data-clave="palabras-clave"><span class="texto">Sé qué son las palabras clave.</span></label></li>
+      <li><label><input type="checkbox" data-clave="titulo-seo-meta-descripcion"><span class="texto">Sé para qué sirve el título SEO y la meta descripción.</span></label></li>
+      <li><label><input type="checkbox" data-clave="sitemap"><span class="texto">Comprendo la función de un sitemap.</span></label></li>
+      <li><label><input type="checkbox" data-clave="google-search-console"><span class="texto">Sé qué es Google Search Console.</span></label></li>
+      <li><label><input type="checkbox" data-clave="seo-onpage-tecnico"><span class="texto">Distingo SEO On Page y SEO técnico.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" data-seccion="5">
+    <header>
+      <span class="num">5</span>
+      <h2>Seguridad y aspectos legales</h2>
+      <span class="contador-seccion">0/6</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="https"><span class="texto">Comprendo por qué debemos utilizar HTTPS.</span></label></li>
+      <li><label><input type="checkbox" data-clave="certificado-ssl-tls"><span class="texto">Sé qué es un certificado SSL/TLS.</span></label></li>
+      <li><label><input type="checkbox" data-clave="actualizar-wordpress-plugins"><span class="texto">Sé por qué debemos actualizar WordPress y sus plugins.</span></label></li>
+      <li><label><input type="checkbox" data-clave="copias-seguridad"><span class="texto">Comprendo la importancia de las copias de seguridad.</span></label></li>
+      <li><label><input type="checkbox" data-clave="usuarios-contrasenas"><span class="texto">Sé por qué debemos proteger los usuarios y contraseñas.</span></label></li>
+      <li><label><input type="checkbox" data-clave="rgpd-privacidad"><span class="texto">Comprendo la importancia del RGPD y la privacidad.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" data-seccion="6">
+    <header>
+      <span class="num">6</span>
+      <h2>Publicación de webs</h2>
+      <span class="contador-seccion">0/8</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="hosting"><span class="texto">Sé qué es un hosting.</span></label></li>
+      <li><label><input type="checkbox" data-clave="dominio"><span class="texto">Comprendo qué es un dominio.</span></label></li>
+      <li><label><input type="checkbox" data-clave="servidor-local"><span class="texto">Sé qué es un servidor local.</span></label></li>
+      <li><label><input type="checkbox" data-clave="xampp-localwp"><span class="texto">Distingo XAMPP y LocalWP.</span></label></li>
+      <li><label><input type="checkbox" data-clave="ftp"><span class="texto">Comprendo para qué sirve FTP.</span></label></li>
+      <li><label><input type="checkbox" data-clave="filezilla"><span class="texto">Sé qué es FileZilla.</span></label></li>
+      <li><label><input type="checkbox" data-clave="git-github"><span class="texto">Distingo Git y GitHub.</span></label></li>
+      <li><label><input type="checkbox" data-clave="netlify"><span class="texto">Comprendo cómo funciona Netlify.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" data-seccion="7">
+    <header>
+      <span class="num">7</span>
+      <h2>Otras tecnologías</h2>
+      <span class="contador-seccion">0/4</span>
+    </header>
+    <ul class="items">
+      <li><label><input type="checkbox" data-clave="react"><span class="texto">Sé qué es React y para qué se utiliza.</span></label></li>
+      <li><label><input type="checkbox" data-clave="astro"><span class="texto">Comprendo qué es Astro.</span></label></li>
+      <li><label><input type="checkbox" data-clave="ssg-web-estatica"><span class="texto">Sé qué significa generar una web estática (SSG).</span></label></li>
+      <li><label><input type="checkbox" data-clave="varias-tecnologias"><span class="texto">Comprendo que existen diferentes tecnologías para construir webs.</span></label></li>
+    </ul>
+  </section>
+
+  <section class="card" id="puntos-debiles">
+    <header>
+      <span class="num" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </span>
+      <h2>Mis puntos débiles</h2>
+    </header>
+    <p class="pista">Los tres contenidos que necesito repasar más:</p>
+    <div class="lineas">
+      <div class="linea"><span class="n">1.</span><input type="text" data-debil="0" placeholder="Escribe el primer contenido…" autocomplete="off"></div>
+      <div class="linea"><span class="n">2.</span><input type="text" data-debil="1" placeholder="Escribe el segundo contenido…" autocomplete="off"></div>
+      <div class="linea"><span class="n">3.</span><input type="text" data-debil="2" placeholder="Escribe el tercer contenido…" autocomplete="off"></div>
+    </div>
+  </section>
+
+  <section class="card" id="autoevaluacion">
+    <header>
+      <span class="num" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.4-3 4"/><path d="M12 17.5h.01"/></svg>
+      </span>
+      <h2>¿Me siento preparado para la evaluación?</h2>
+    </header>
+    <div class="opciones">
+      <label><input type="radio" name="preparado" value="si"><span>Sí.</span></label>
+      <label><input type="radio" name="preparado" value="repasar"><span>Necesito repasar algunos contenidos.</span></label>
+      <label><input type="radio" name="preparado" value="ayuda"><span>Necesito ayuda con varios temas.</span></label>
+    </div>
+  </section>
+
+</main>
+
+<footer>Tu progreso se guarda solo en este dispositivo (localStorage del navegador). Si borras los datos del navegador, se reinicia.</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var CLAVE = "repaso-modulo-3-v1";
+
+  function estadoVacio() {
+    return { marcas: {}, debiles: ["", "", ""], preparado: "" };
+  }
+
+  var estado = estadoVacio();
+  try {
+    var bruto = localStorage.getItem(CLAVE);
+    if (bruto) {
+      var datos = JSON.parse(bruto);
+      if (datos && typeof datos === "object") {
+        if (datos.marcas && typeof datos.marcas === "object") estado.marcas = datos.marcas;
+        if (Array.isArray(datos.debiles)) estado.debiles = datos.debiles;
+        if (typeof datos.preparado === "string") estado.preparado = datos.preparado;
+      }
+    }
+  } catch (e) {
+    /* localStorage no disponible: la página sigue funcionando sin memoria */
+  }
+
+  function guardar() {
+    try { localStorage.setItem(CLAVE, JSON.stringify(estado)); } catch (e) { /* sin almacenamiento */ }
+  }
+
+  var casillas = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-clave]'));
+  var secciones = Array.prototype.slice.call(document.querySelectorAll(".card[data-seccion]"));
+  var elContador = document.getElementById("contador");
+  var elPorcentaje = document.getElementById("porcentaje");
+  var elRelleno = document.getElementById("relleno");
+
+  function refrescar() {
+    var total = casillas.length;
+    var hechas = casillas.filter(function (c) { return c.checked; }).length;
+    var pct = total ? Math.round((hechas * 100) / total) : 0;
+
+    elContador.textContent = hechas + "/" + total;
+    elPorcentaje.textContent = pct + " %";
+    elRelleno.style.width = pct + "%";
+    elRelleno.classList.toggle("completo", total > 0 && hechas === total);
+
+    secciones.forEach(function (sec) {
+      var cas = sec.querySelectorAll('input[type="checkbox"]');
+      var n = 0;
+      cas.forEach(function (c) { if (c.checked) n++; });
+      var pill = sec.querySelector(".contador-seccion");
+      if (pill) {
+        pill.textContent = n + "/" + cas.length;
+        pill.classList.toggle("completo", cas.length > 0 && n === cas.length);
+      }
+    });
+  }
+
+  /* Checkboxes */
+  casillas.forEach(function (c) {
+    var li = c.closest("li");
+    c.checked = !!estado.marcas[c.getAttribute("data-clave")];
+    if (c.checked && li) li.classList.add("done");
+    c.addEventListener("change", function () {
+      estado.marcas[c.getAttribute("data-clave")] = c.checked;
+      if (li) li.classList.toggle("done", c.checked);
+      guardar();
+      refrescar();
+    });
+  });
+
+  /* Puntos débiles (3 líneas de texto) */
+  Array.prototype.slice.call(document.querySelectorAll("input[data-debil]")).forEach(function (inp) {
+    var i = parseInt(inp.getAttribute("data-debil"), 10);
+    if (typeof estado.debiles[i] === "string") inp.value = estado.debiles[i];
+    inp.addEventListener("input", function () {
+      estado.debiles[i] = inp.value;
+      guardar();
+    });
+  });
+
+  /* Autoevaluación (radios) */
+  var radios = Array.prototype.slice.call(document.querySelectorAll('input[name="preparado"]'));
+  function pintarRadios() {
+    radios.forEach(function (r) {
+      var lab = r.closest("label");
+      if (lab) lab.classList.toggle("elegida", r.checked);
+    });
+  }
+  radios.forEach(function (r) {
+    r.checked = (estado.preparado === r.value);
+    r.addEventListener("change", function () {
+      if (r.checked) {
+        estado.preparado = r.value;
+        guardar();
+      }
+      pintarRadios();
+    });
+  });
+
+  pintarRadios();
+  refrescar();
+})();
+</script>
+
+</body>
+</html>

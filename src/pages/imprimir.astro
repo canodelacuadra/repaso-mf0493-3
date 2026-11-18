@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { introduccion, temas } from '../lib/temas.js';
+---
+
+<BaseLayout titulo="Temario completo · Repaso MF0493_3" sinMenu>
+  <p class="aviso-pantalla">
+    Esta vista está preparada para imprimir. Usa la combinación <kbd>Ctrl</kbd> + <kbd>P</kbd>
+    para guardarla como PDF o imprimirla.
+  </p>
+
+  <div class="hoja-imprimir">
+    <section class="hero" set:html={introduccion} />
+
+    {
+      temas.map((tema) => (
+        <section class="apartado-apaisado">
+          <h1 class="apartado-titulo">
+            <span class="apartado-num">{String(tema.numero).padStart(2, '0')}</span>
+            {tema.titulo}
+          </h1>
+          <div class="contenido-markdown" set:html={tema.html} />
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>
