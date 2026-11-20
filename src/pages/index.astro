@@ -11,8 +11,9 @@ const url = (ruta: string) => (ruta === '/' ? `${base}/` : `${base}${ruta}/`);
 
   <h2 id="temas" class="seccion-titulo">Los {temas.length} apartados</h2>
   <p class="seccion-intro">
-    Elige un apartado para repasarlo o practica con las{' '}
-    <a href={url('/actividades')}>actividades</a>. También puedes{' '}
+    Elige un apartado para repasarlo, practica con las{' '}
+    <a href={url('/actividades')}>actividades</a> o haz el{' '}
+    <a href={url('/practica')}>test de repaso</a>. También puedes{' '}
     <a href={url('/imprimir')}>imprimir el temario completo</a>.
   </p>
 

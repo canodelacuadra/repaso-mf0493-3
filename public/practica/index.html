@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d4ed8">
+<title>Test de repaso · Módulo 3</title>
+<style>
+  :root {
+    --azul: #1d4ed8;
+    --azul-oscuro: #1e3a8a;
+    --azul-suave: #eff6ff;
+    --verde: #16a34a;
+    --verde-texto: #15803d;
+    --rojo: #dc2626;
+    --rojo-texto: #b91c1c;
+    --texto: #1e293b;
+    --suave: #64748b;
+    --borde: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+  .volver {
+    display: inline-block; margin-bottom: 8px;
+    color: var(--azul); text-decoration: none; font-size: .8rem; font-weight: 600;
+  }
+  .volver:hover { text-decoration: underline; }
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255, 255, 255, .97);
+    border-bottom: 1px solid var(--borde);
+    padding: 14px 0 12px;
+  }
+  h1 { margin: 0; font-size: 1.3rem; color: var(--azul-oscuro); letter-spacing: -.01em; }
+  .sub { margin: 2px 0 0; color: var(--suave); font-size: .82rem; }
+  .barra-acciones { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  button {
+    font: inherit; font-weight: 700; padding: 10px 16px;
+    border-radius: 10px; border: 1px solid var(--azul);
+    background: var(--azul); color: #fff; cursor: pointer;
+  }
+  button:hover { filter: brightness(1.06); }
+  button.secundario { background: #fff; color: var(--azul); }
+  .resumen { margin: 10px 0 0; font-size: .9rem; font-weight: 600; }
+  .resumen.visible {
+    padding: 10px 12px; border-radius: 10px;
+    background: var(--azul-suave); border: 1px solid var(--borde);
+  }
+  .resumen.perfecto {
+    color: var(--verde-texto); background: #ecfdf5; border-color: var(--verde);
+  }
+  main { padding: 20px 0 30px; }
+  .card {
+    border: 1px solid var(--borde); border-radius: 12px;
+    margin-bottom: 18px; background: #fff; overflow: hidden; scroll-margin-top: 110px;
+  }
+  .card > header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; background: var(--azul-suave);
+    border-bottom: 1px solid var(--borde);
+  }
+  .num {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: var(--azul); color: #fff; font-weight: 700;
+    display: grid; place-content: center; font-size: .95rem;
+  }
+  .card h2 { margin: 0; font-size: .98rem; color: var(--azul-oscuro); flex: 1; line-height: 1.3; }
+  .opciones { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .opciones label {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px; border: 1px solid var(--borde); border-radius: 10px;
+    cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .opciones label:hover { border-color: var(--azul); background: #fbfdff; }
+  .opciones label.elegida { border-color: var(--azul); background: var(--azul-suave); }
+  .opciones input[type="radio"] {
+    width: 18px; height: 18px; margin: 2px 0 0; flex-shrink: 0;
+    accent-color: var(--azul); cursor: pointer;
+  }
+  .card.acierto { box-shadow: inset 5px 0 0 0 var(--verde); }
+  .card.error { box-shadow: inset 5px 0 0 0 var(--rojo); }
+  .card.sin-responder { box-shadow: inset 5px 0 0 0 #f59e0b; }
+  .explicacion {
+    margin: 0 14px 14px; padding: 10px 12px;
+    border-radius: 10px; background: #f8fafc;
+    border: 1px dashed var(--borde); font-size: .87rem;
+  }
+  .explicacion[hidden] { display: none; }
+  .card.acierto .explicacion { border-color: var(--verde); color: var(--verde-texto); }
+  .card.error .explicacion,
+  .card.sin-responder .explicacion { border-color: var(--rojo); color: var(--rojo-texto); }
+  footer { text-align: center; color: var(--suave); font-size: .78rem; padding: 6px 16px 34px; }
+  @media (max-width: 520px) {
+    .topbar { padding: 12px 0 10px; }
+    h1 { font-size: 1.1rem; }
+  }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="volver" href="../">← Volver al temario</a>
+    <h1>Test de repaso · Módulo 3</h1>
+    <p class="sub">16 preguntas · 2 por apartado · corrección al final</p>
+    <div class="barra-acciones">
+      <button id="corregir" type="button">Corregir test</button>
+      <button id="reintentar" class="secundario" type="button">Reintentar</button>
+    </div>
+    <p id="resumen" class="resumen" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<main class="wrap">
+  <form id="test">
+
+    <section class="card" data-id="q1" data-correct="B">
+      <header><span class="num">1</span><h2>¿Qué diferencia principal hay entre una web estática y una dinámica?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q1" value="A"><span>La estática usa base de datos y la dinámica no.</span></label>
+        <label><input type="radio" name="q1" value="B"><span>La estática muestra el mismo HTML para todos; la dinámica genera el contenido según la petición.</span></label>
+        <label><input type="radio" name="q1" value="C"><span>La dinámica no puede utilizar CSS.</span></label>
+        <label><input type="radio" name="q1" value="D"><span>No hay ninguna diferencia: son dos nombres para lo mismo.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. En la web estática el HTML se sirve tal cual; en la dinámica se genera con datos (por ejemplo, desde una base de datos) en cada petición.</div>
+    </section>
+
+    <section class="card" data-id="q2" data-correct="C">
+      <header><span class="num">2</span><h2>¿Para qué se utiliza React?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q2" value="A"><span>Para alojar archivos en un servidor.</span></label>
+        <label><input type="radio" name="q2" value="B"><span>Para gestionar una base de datos MySQL.</span></label>
+        <label><input type="radio" name="q2" value="C"><span>Para crear interfaces interactivas a base de componentes.</span></label>
+        <label><input type="radio" name="q2" value="D"><span>Para redactar entradas en WordPress.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: C. React es una biblioteca de JavaScript para construir interfaces de usuario, especialmente aplicaciones de una sola página (SPA).</div>
+    </section>
+
+    <section class="card" data-id="q3" data-correct="B">
+      <header><span class="num">3</span><h2>En WordPress, ¿qué se usa para publicar contenidos periódicos como noticias o artículos de blog?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q3" value="A"><span>Las páginas.</span></label>
+        <label><input type="radio" name="q3" value="B"><span>Las entradas (posts).</span></label>
+        <label><input type="radio" name="q3" value="C"><span>Los menús.</span></label>
+        <label><input type="radio" name="q3" value="D"><span>Los widgets.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. Las entradas están pensadas para contenido cronológico y se agrupan por categorías y etiquetas; las páginas son para contenido estático como «Sobre nosotros».</div>
+    </section>
+
+    <section class="card" data-id="q4" data-correct="C">
+      <header><span class="num">4</span><h2>En WordPress, ¿qué permiten los roles y capacidades (permisos)?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q4" value="A"><span>Cambiar el tema visual automáticamente.</span></label>
+        <label><input type="radio" name="q4" value="B"><span>Aumentar la velocidad del servidor.</span></label>
+        <label><input type="radio" name="q4" value="C"><span>Definir qué puede hacer cada usuario dentro del panel.</span></label>
+        <label><input type="radio" name="q4" value="D"><span>Crear copias de seguridad automáticas.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: C. Administrador, editor, autor, colaborador y suscriptor tienen permisos distintos: publicar, editar, moderar comentarios, etc.</div>
+    </section>
+
+    <section class="card" data-id="q5" data-correct="B">
+      <header><span class="num">5</span><h2>¿Qué elemento de WordPress controla principalmente la apariencia y el diseño del sitio?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q5" value="A"><span>Un plugin de SEO.</span></label>
+        <label><input type="radio" name="q5" value="B"><span>Un tema (theme).</span></label>
+        <label><input type="radio" name="q5" value="C"><span>Una pasarela de pago.</span></label>
+        <label><input type="radio" name="q5" value="D"><span>El archivo .gitignore.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. El tema define la estructura visual, los colores, la tipografía y las plantillas; los plugins añaden funcionalidades.</div>
+    </section>
+
+    <section class="card" data-id="q6" data-correct="C">
+      <header><span class="num">6</span><h2>¿Para qué sirve el plugin Smush?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q6" value="A"><span>Para crear copias de seguridad.</span></label>
+        <label><input type="radio" name="q6" value="B"><span>Para añadir un formulario de contacto.</span></label>
+        <label><input type="radio" name="q6" value="C"><span>Para optimizar y comprimir imágenes.</span></label>
+        <label><input type="radio" name="q6" value="D"><span>Para gestionar pedidos de WooCommerce.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: C. Smush comprime las imágenes sin perder apenas calidad, lo que reduce el peso de la web y mejora su velocidad de carga.</div>
+    </section>
+
+    <section class="card" data-id="q7" data-correct="C">
+      <header><span class="num">7</span><h2>En WooCommerce, ¿qué es un producto variable?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q7" value="A"><span>Un producto que cambia de precio automáticamente cada día.</span></label>
+        <label><input type="radio" name="q7" value="B"><span>Un producto que no tiene stock.</span></label>
+        <label><input type="radio" name="q7" value="C"><span>Un producto con opciones como talla o color, cada una con su propia referencia.</span></label>
+        <label><input type="radio" name="q7" value="D"><span>Un producto que solo se puede pagar con cupón.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: C. Las variaciones permiten vender tallas, colores o tamaños con SKU, precio y stock independientes dentro de un mismo producto.</div>
+    </section>
+
+    <section class="card" data-id="q8" data-correct="B">
+      <header><span class="num">8</span><h2>¿Qué significa que un pedido de WooCommerce está «Procesando»?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q8" value="A"><span>Que el cliente aún no ha realizado el pago.</span></label>
+        <label><input type="radio" name="q8" value="B"><span>Que el pago se ha confirmado y se está preparando el pedido.</span></label>
+        <label><input type="radio" name="q8" value="C"><span>Que el pedido ha sido cancelado.</span></label>
+        <label><input type="radio" name="q8" value="D"><span>Que el pedido ya se ha entregado al cliente.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. El flujo habitual es Pendiente → Procesando → Completado: en «Procesando» el pago está recibido y queda preparar y enviar.</div>
+    </section>
+
+    <section class="card" data-id="q9" data-correct="B">
+      <header><span class="num">9</span><h2>¿Cuál es la función principal de un sitemap (mapa del sitio)?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q9" value="A"><span>Comprimir las imágenes del sitio.</span></label>
+        <label><input type="radio" name="q9" value="B"><span>Ayudar a los motores de búsqueda a descubrir y rastrear las páginas.</span></label>
+        <label><input type="radio" name="q9" value="C"><span>Proteger el sitio frente a ataques.</span></label>
+        <label><input type="radio" name="q9" value="D"><span>Crear copias de seguridad automáticas.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. El sitemap.xml lista las URLs importantes para que Google y otros buscadores rastreen el sitio de forma más completa.</div>
+    </section>
+
+    <section class="card" data-id="q10" data-correct="B">
+      <header><span class="num">10</span><h2>¿Cuál de estas acciones pertenece al SEO On Page y no al SEO técnico?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q10" value="A"><span>Configurar el archivo robots.txt.</span></label>
+        <label><input type="radio" name="q10" value="B"><span>Escribir títulos y metadescripciones optimizados y usar palabras clave en el contenido.</span></label>
+        <label><input type="radio" name="q10" value="C"><span>Mejorar la velocidad de carga del servidor.</span></label>
+        <label><input type="radio" name="q10" value="D"><span>Instalar un certificado SSL.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. El SEO On Page trabaja el contenido y sus etiquetas; el SEO técnico se ocupa de rastreo, velocidad, HTTPS, redirecciones, etc.</div>
+    </section>
+
+    <section class="card" data-id="q11" data-correct="B">
+      <header><span class="num">11</span><h2>¿Qué garantiza el HTTPS?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q11" value="A"><span>Que la web cargue siempre más rápido.</span></label>
+        <label><input type="radio" name="q11" value="B"><span>Que la comunicación entre el navegador y el servidor va cifrada.</span></label>
+        <label><input type="radio" name="q11" value="C"><span>Que la web aparezca la primera en Google.</span></label>
+        <label><input type="radio" name="q11" value="D"><span>Que el sitio ya no necesite actualizaciones.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. El certificado SSL/TLS cifra el canal de comunicación y además verifica la identidad del sitio; no sustituye a las actualizaciones ni garantiza el primer puesto en Google.</div>
+    </section>
+
+    <section class="card" data-id="q12" data-correct="B">
+      <header><span class="num">12</span><h2>Respecto al RGPD, ¿qué debemos hacer al recoger datos personales en un formulario?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q12" value="A"><span>Guardar los datos sin informar al usuario.</span></label>
+        <label><input type="radio" name="q12" value="B"><span>Informar del tratamiento y pedir el consentimiento (aceptar la política de privacidad).</span></label>
+        <label><input type="radio" name="q12" value="C"><span>Publicar los datos en la web para mayor transparencia.</span></label>
+        <label><input type="radio" name="q12" value="D"><span>No hace falta hacer nada especial.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. Hay que informar de quién trata los datos, para qué y durante cuánto tiempo, y recabar una aceptación libre y explícita antes de enviarlos.</div>
+    </section>
+
+    <section class="card" data-id="q13" data-correct="B">
+      <header><span class="num">13</span><h2>¿Cuál es la diferencia entre Git y GitHub?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q13" value="A"><span>Son exactamente lo mismo: dos nombres del programa.</span></label>
+        <label><input type="radio" name="q13" value="B"><span>Git es el sistema de control de versiones local; GitHub es una plataforma para alojar repositorios.</span></label>
+        <label><input type="radio" name="q13" value="C"><span>Git sirve para subir archivos por FTP y GitHub para comprar dominios.</span></label>
+        <label><input type="radio" name="q13" value="D"><span>GitHub es un lenguaje de programación y Git un servidor web.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. Git funciona en tu ordenador sin conexión; GitHub (o GitLab, Bitbucket…) añade un repositorio remoto y herramientas de colaboración.</div>
+    </section>
+
+    <section class="card" data-id="q14" data-correct="A">
+      <header><span class="num">14</span><h2>¿Para qué se utiliza FileZilla?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q14" value="A"><span>Para subir y descargar archivos al servidor mediante FTP/SFTP.</span></label>
+        <label><input type="radio" name="q14" value="B"><span>Para editar el código de un tema de WordPress.</span></label>
+        <label><input type="radio" name="q14" value="C"><span>Para crear bases de datos MySQL.</span></label>
+        <label><input type="radio" name="q14" value="D"><span>Para gestionar los pedidos de la tienda.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: A. FileZilla es un cliente FTP/SFTP: conecta con el hosting y permite transferir archivos entre el ordenador local y el servidor.</div>
+    </section>
+
+    <section class="card" data-id="q15" data-correct="C">
+      <header><span class="num">15</span><h2>¿Qué comando de Git crea un repositorio nuevo en la carpeta actual?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q15" value="A"><span>git add .</span></label>
+        <label><input type="radio" name="q15" value="B"><span>git commit -m "inicio"</span></label>
+        <label><input type="radio" name="q15" value="C"><span>git init</span></label>
+        <label><input type="radio" name="q15" value="D"><span>git push</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: C. git init crea la carpeta oculta .git y empieza a registrar versiones en ese directorio; git clone, en cambio, copia un repositorio ya existente.</div>
+    </section>
+
+    <section class="card" data-id="q16" data-correct="B">
+      <header><span class="num">16</span><h2>¿Qué hace exactamente <code>git add .</code>?</h2></header>
+      <div class="opciones">
+        <label><input type="radio" name="q16" value="A"><span>Sube los cambios al repositorio remoto.</span></label>
+        <label><input type="radio" name="q16" value="B"><span>Añade todos los archivos modificados al área de preparación (staging).</span></label>
+        <label><input type="radio" name="q16" value="C"><span>Crea un commit con mensaje automático.</span></label>
+        <label><input type="radio" name="q16" value="D"><span>Borra los archivos que no están siendo rastreados.</span></label>
+      </div>
+      <div class="explicacion" hidden>Respuesta correcta: B. git add prepara los cambios para el siguiente commit; después git commit los guarda en el historial y git push los envía al remoto.</div>
+    </section>
+
+  </form>
+</main>
+
+<footer>Tus respuestas se guardan solo en este dispositivo (localStorage del navegador).</footer>
+
+<script>
+(function () {
+  var CLAVE = 'repaso-mf0493-3-practica-v1';
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var corregir = document.getElementById('corregir');
+  var reintentar = document.getElementById('reintentar');
+  var resumen = document.getElementById('resumen');
+
+  function guardar() {
+    var respuestas = {};
+    cards.forEach(function (card) {
+      var elegida = card.querySelector('input[type=radio]:checked');
+      respuestas[card.dataset.id] = elegida ? elegida.value : '';
+    });
+    try { localStorage.setItem(CLAVE, JSON.stringify(respuestas)); } catch (e) {}
+  }
+
+  function marcarElegida(card) {
+    var elegida = card.querySelector('input[type=radio]:checked');
+    card.querySelectorAll('.opciones label').forEach(function (label) {
+      label.classList.remove('elegida');
+    });
+    if (elegida) elegida.closest('label').classList.add('elegida');
+  }
+
+  cards.forEach(function (card) {
+    card.querySelectorAll('input[type=radio]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        marcarElegida(card);
+        guardar();
+      });
+    });
+  });
+
+  try {
+    var guardado = JSON.parse(localStorage.getItem(CLAVE) || '{}');
+    cards.forEach(function (card) {
+      var valor = guardado[card.dataset.id];
+      if (!valor) return;
+      var input = card.querySelector('input[type=radio][value="' + valor + '"]');
+      if (input) { input.checked = true; marcarElegida(card); }
+    });
+  } catch (e) {}
+
+  corregir.addEventListener('click', function () {
+    var aciertos = 0;
+    var respondidas = 0;
+    cards.forEach(function (card) {
+      var elegida = card.querySelector('input[type=radio]:checked');
+      var correcta = card.dataset.correct;
+      card.classList.remove('acierto', 'error', 'sin-responder');
+      if (!elegida) {
+        card.classList.add('sin-responder');
+      } else {
+        respondidas++;
+        if (elegida.value === correcta) {
+          card.classList.add('acierto');
+          aciertos++;
+        } else {
+          card.classList.add('error');
+        }
+      }
+      card.querySelector('.explicacion').hidden = false;
+    });
+
+    var porcentaje = Math.round((aciertos / cards.length) * 100);
+    var texto = 'Resultado: ' + aciertos + '/' + cards.length + ' (' + porcentaje + '%)';
+    if (respondidas < cards.length) texto += ' · ' + (cards.length - respondidas) + ' sin responder';
+    if (aciertos === cards.length) texto += ' · ¡Perfecto!';
+    resumen.textContent = texto;
+    resumen.className = 'resumen visible' + (aciertos === cards.length ? ' perfecto' : '');
+    guardar();
+    resumen.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  reintentar.addEventListener('click', function () {
+    cards.forEach(function (card) {
+      card.querySelectorAll('input[type=radio]').forEach(function (input) {
+        input.checked = false;
+      });
+      card.querySelectorAll('.opciones label').forEach(function (label) {
+        label.classList.remove('elegida');
+      });
+      card.classList.remove('acierto', 'error', 'sin-responder');
+      card.querySelector('.explicacion').hidden = true;
+    });
+    resumen.textContent = '';
+    resumen.className = 'resumen';
+    try { localStorage.removeItem(CLAVE); } catch (e) {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+
+</body>
+</html>
+

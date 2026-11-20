@@ -14,6 +14,7 @@ El temario está en `temas.md`. No hay contenido duplicado: la web lee ese archi
 - una página por apartado (`/tema/1`, `/tema/2`, …);
 - una vista de temario completo para imprimir (`/imprimir`);
 - una página de actividades interactivas (`/actividades`), servida desde `public/actividades/index.html`;
+- un test de opción múltiple (`/practica`), servido desde `public/practica/index.html`;
 - un checklist interactivo (`/checklist.html`), servido desde `public/checklist.html`.
 
 Para editar el temario, modifica `temas.md` manteniendo los encabezados `## 1. Título`, `## 2. Título`, etc. El bloque anterior al apartado 1 se usa como cabecera de la portada.

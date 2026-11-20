@@ -34,6 +34,7 @@ const url = (ruta: string) => (ruta === '/' ? `${base}/` : `${base}${ruta}/`);
         <nav class="nav-principal" aria-label="Navegación principal">
           <a href={url('/')}>Temario</a>
           <a href={url('/actividades')}>Actividades</a>
+          <a href={url('/practica')}>Práctica</a>
           <a href={`${base}/checklist.html`}>Checklist</a>
           <a href={url('/imprimir')}>Imprimir</a>
         </nav>
@@ -58,6 +59,7 @@ const url = (ruta: string) => (ruta === '/' ? `${base}/` : `${base}${ruta}/`);
             ))}
           </ol>
           <a class="indice-todo" href={url('/imprimir')}>Ver temario completo →</a>
+          <a class="indice-todo" href={url('/practica')}>Hacer el test de repaso →</a>
         </aside>
       )}
 
